@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'HindVadodara-Bold';
+    src: url('/fonts/HindVadodara-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HindVadodara-Light';
+    src: url('/fonts/HindVadodara-Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HindVadodara-Medium';
+    src: url('/fonts/HindVadodara-Medium.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HindVadodara-Regular';
+    src: url('/fonts/HindVadodara-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HindVadodara-Semibold';
+    src: url('/fonts/HindVadodara-SemiBold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

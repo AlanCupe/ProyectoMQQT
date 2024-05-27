@@ -1,0 +1,276 @@
+/* Estilos generales de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'HindVadodara-Light', sans-serif;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    text-align: center;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #17326d;
+    color: white;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+/* Estados específicos */
+.pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.completed {
+    color: green;
+    font-weight: bold;
+}
+
+.delayed {
+    color: red;
+    font-weight: bold;
+}
+
+.onschedule {
+    color: blue;
+    font-weight: bold;
+}
+
+/* Título de la tabla */
+.tituloTabla {
+    font-size: 1.5em;
+    font-family: 'HindVadodara-Bold';
+    padding-bottom: 20px;
+    color: #003D7A;
+    text-align: center;
+}
+
+/* Botones */
+.btnEditar, .btnEliminar {
+    padding: 10px 15px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btnEditar {
+    background-color: #007bff;
+    color: white;
+}
+
+.btnEditar:hover {
+    background-color: #0056b3;
+}
+
+.btnEliminar {
+    background-color: #6c757d;
+    color: white;
+}
+
+   .tabla{
+    
+        width: 100%;
+        input{
+            padding: 8px;
+            border-radius: 10px;
+            border: none;
+            text-align: center;
+        }
+        input:focus{
+           outline: none;
+           thead{
+            border-radius:10px 0px 0px 10px;
+           }
+        }
+    
+    .containerButton{
+        display: flex;
+        flex-direction: row;
+        column-gap: 10px;
+        justify-content: center;
+        img{
+            width: 30px;
+            cursor: pointer;
+           
+        }
+        img:hover{
+            transform: scale(1.2,1.2);
+        }
+    }
+       
+    }
+
+/* UserTable.css */
+
+/* UserTable.css */
+/* UserTable.css */
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: auto;
+    z-index: 1000;
+    font-size: 10px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.modal-content {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-top: 20px;
+}
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.filters input {
+    margin-left: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'HindVadodara-Light', sans-serif;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    text-align: center;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #17326d;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+/* Si tienes estados específicos como en ProjectTable, puedes agregarlos aquí */
+.pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.completed {
+    color: green;
+    font-weight: bold;
+}
+
+.delayed {
+    color: red;
+    font-weight: bold;
+}
+
+.onschedule {
+    color: blue;
+    font-weight: bold;
+}
+
+.tituloTabla {
+    font-size: 1.5em;
+    font-family: 'HindVadodara-Bold';
+    padding-bottom: 20px;
+    color: #003D7A;
+    text-align: center;
+}
+
+.btnEditar {
+    background-color: black;
+}
+
+.btnEditar, .btnEliminar {
+    padding: 10px 15px;
+    font-weight: bold;
+}
+
+.tabla {
+    width: 100%;
+    input {
+        padding: 8px;
+        border-radius: 10px;
+        border: none;
+        text-align: center;
+    }
+    input:focus {
+        outline: none;
+        thead {
+            border-radius: 10px 0px 0px 10px;
+        }
+    }
+
+    .containerButton {
+        display: flex;
+        flex-direction: row;
+        column-gap: 10px;
+        justify-content: center;
+        img {
+            width: 30px;
+            cursor: pointer;
+        }
+        img:hover {
+            transform: scale(1.2, 1.2);
+        }
+    }
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: red;
+}

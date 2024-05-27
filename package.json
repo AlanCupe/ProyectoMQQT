@@ -1,0 +1,71 @@
+{
+  "name": "sistemamqtt",
+  "version": "0.0.0",
+  "description": "SistemaSeguimiento",
+  "author": "Giancarlos",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "start": "nodemon server.js",
+    "electron-pack": "electron-builder"
+  },
+  "dependencies": {
+    "@mui/icons-material": "^5.15.16",
+    "@mui/material": "^5.15.16",
+    "@vitejs/plugin-react": "^4.2.1",
+    "axios": "^1.6.8",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.19.2",
+    "jquery": "^3.7.1",
+    "moment-timezone": "^0.5.45",
+    "mqtt": "^5.5.5",
+    "mssql": "^10.0.2",
+    "react": "^18.2.0",
+    "react-datepicker": "^6.9.0",
+    "react-dom": "^18.2.0",
+    "react-export-excel": "^0.5.3",
+    "react-modal": "^3.16.1",
+    "react-router": "^6.23.0",
+    "react-router-dom": "^6.23.1",
+    "react-select": "^5.8.0",
+    "react-select-2": "^2.0.11",
+    "select2": "^4.1.0-rc.0",
+    "sweetalert2": "^11.10.8",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "nodemon": "^3.1.0",
+    "vite": "^5.2.0"
+  },
+  "build": {
+    "appId": "com.electron.sistemamqtt",
+    "productName": "SistemaMQTT",
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "main.js",
+      "index.html"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": "msi",
+      "icon": "public/img/ico.png"
+    }
+}
+
+}

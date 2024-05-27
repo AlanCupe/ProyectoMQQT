@@ -1,0 +1,67 @@
+.btn-filter{
+    background-color: #17326D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+    margin-bottom: 10PX;
+    box-shadow: 0px 0px 5px #000000;
+&:hover{
+    background-color: #0056b3;;
+}
+}
+
+
+.overlay {
+    background: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.filter-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.filter-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex: 1;
+}
+
+.filter-button, .download-button {
+    padding: 10px 20px;
+    background-color: #17326D;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.filter-button:hover, .download-button:hover {
+    background-color: #0056b3;
+}
+
+.download-button{
+    margin-top: 10px;
+}
