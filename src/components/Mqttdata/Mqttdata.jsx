@@ -1,26 +1,46 @@
 import React, { useEffect, useState, useContext } from 'react';
 import mqtt from 'mqtt';
+import axios from 'axios';
 import { BeaconContext } from '../../Context/BeaconProvider';
 
 export const Mqttdata = () => {
     const { addMqttData } = useContext(BeaconContext);
     const [mqttClient, setMqttClient] = useState(null);
+    const [gatewayMacAddresses, setGatewayMacAddresses] = useState([]);
 
     useEffect(() => {
+        const fetchGateways = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/gatewayregister');
+                const macAddresses = response.data.map(gateway => gateway.MacAddress);
+                
+                console.log("tabla Gateway", macAddresses)
+
+                setGatewayMacAddresses(macAddresses);
+            } catch (error) {
+                console.error('Error al obtener gateways:', error);
+            }
+        };
+
+        fetchGateways();
+    }, []);
+
+    useEffect(() => {
+        if (gatewayMacAddresses.length === 0) return;
+
         const client = mqtt.connect('mqtt://localhost:9001');
         setMqttClient(client);
 
         client.on('connect', () => {
             console.log('Cliente MQTT conectado');
-            client.subscribe('/gw/ac233fc18d06/status');
-            client.subscribe('/gw/ac233fc18cfb/status');
-            client.subscribe('/gw/ac233fc18d08/status');
-            client.subscribe('/gw/ac233fc18cff/status'); // Nuevo gateway
+            gatewayMacAddresses.forEach((macAddress,i) => {
+                client.subscribe(`/gw/${macAddress.toLowerCase()}/status`);
+            });
         });
 
         client.on('message', (topic, message) => {
             const parsedMessage = JSON.parse(message.toString());
-            if (topic === '/gw/ac233fc18d06/status' || topic === '/gw/ac233fc18cfb/status' || topic === '/gw/ac233fc18d08/status' || topic === '/gw/ac233fc18cff/status') {
+            if (topic.startsWith('/gw/')) {
                 saveDataToServer(topic, parsedMessage);
             }
         });
@@ -29,7 +49,7 @@ export const Mqttdata = () => {
             console.log('Desconectando cliente MQTT...');
             client.end();
         };
-    }, []);
+    }, [gatewayMacAddresses]);
 
     const saveDataToServer = async (topic, data) => {
         try {

@@ -1,13 +1,7 @@
 const dbConnection = require('../config/dbconfig');
 const sql = require('mssql');
 
-dbConnection.connect()
-    .then(pool => {
-        console.log('Conexión exitosa a la base de datos');
-    })
-    .catch(err => {
-        console.error('Error al conectar con la base de datos:', err);
-    });
+
 
 
 const RSSI_THRESHOLD = -100;

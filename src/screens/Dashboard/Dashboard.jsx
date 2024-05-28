@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import { EventosBeaconsContext } from '../../Context/EventosBeaconsProvider';
 import { GatewayContext } from '../../Context/GatewayProvider';
 import { AreaAssigmentContext } from '../../Context/AreaAssigmentProvider';
 import ProjectTable from '../../components/ProjectTable/ProjectTable';
 import './Dashboard.css';
 
-export const Dashboard = () => {
+export const Dashboard = memo(() => {
     const { eventosBeacons, loading } = useContext(EventosBeaconsContext);
     const { gateways } = useContext(GatewayContext);
     const { assignments, fetchAssignments } = useContext(AreaAssigmentContext);
@@ -112,4 +112,4 @@ export const Dashboard = () => {
             })}
         </div>
     );
-};
+});

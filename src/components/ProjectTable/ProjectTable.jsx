@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import './ProjectTable.css';
 
-const ProjectTable = ({ data }) => {
+const ProjectTable = memo(({ data }) => {
     useEffect(() => {
         console.log("Datos desde DASHBOARD A PROJECT TABLE:", data);
     }, [data]);
@@ -34,6 +34,6 @@ const ProjectTable = ({ data }) => {
             </tbody>
         </table>
     );
-};
+});
 
 export default ProjectTable;
