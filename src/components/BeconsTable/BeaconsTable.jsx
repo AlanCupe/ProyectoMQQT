@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, memo } from 'react';
 import { BeaconContext } from '../../Context/BeaconProvider';
 import Modal from 'react-modal';
 import * as XLSX from 'xlsx';
+import Swal from 'sweetalert2';
 import "./BeaconsTable.css";
 
 Modal.setAppElement('#root'); // Asegúrate de que el id coincida con el id del elemento root en tu index.html
@@ -52,22 +53,39 @@ export const BeaconsTable = memo(() => {
     };
 
     const handleDelete = async (id) => {
-        try {
-            const response = await fetch(`http://localhost:3000/beacons/${id}`, {
-                method: 'DELETE',
-            });
-    
-            if (response.ok) {
-                setUpdateTrigger(prev => !prev);
-            } else {
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esto! Se Recomienda Descargar el Historial de Asignaciones",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:3000/beacons/${id}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    setUpdateTrigger(prev => !prev);
+                    Swal.fire(
+                        'Eliminado!',
+                        'El beacon ha sido eliminado.',
+                        'success'
+                    );
+                } else {
+                    setError('Error al eliminar el beacon.');
+                }
+            } catch (error) {
+                console.error('Error al eliminar el beacon:', error);
                 setError('Error al eliminar el beacon.');
             }
-        } catch (error) {
-            console.error('Error al eliminar el beacon:', error);
-            setError('Error al eliminar el beacon.');
         }
     };
-    
+
     const handleSaveClick = async (id) => {
         const response = await fetch(`http://localhost:3000/beacons/${id}`, {
             method: 'PUT',

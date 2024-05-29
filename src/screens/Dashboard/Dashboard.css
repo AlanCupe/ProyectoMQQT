@@ -95,5 +95,8 @@
             opacity: 1;
         }
     }
-    
+.filtrobutton{
+    width: 150px;
+    height: 50px;
+}
    

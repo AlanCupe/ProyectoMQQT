@@ -2,6 +2,7 @@ import React, { useState, useContext, useMemo, memo, useEffect } from 'react';
 import { UserContext } from '../../Context/UserProvider';
 import Modal from 'react-modal';
 import * as XLSX from 'xlsx';
+import Swal from 'sweetalert2';
 import './UserTable.css';
 
 Modal.setAppElement('#root'); // Asegúrate de que el id coincida con el id del elemento root en tu index.html
@@ -87,17 +88,34 @@ const UsersTable = memo(() => {
     };
 
     const handleDelete = async (id) => {
-        try {
-            const response = await fetch(`http://localhost:3000/personas/${id}`, {
-                method: 'DELETE',
-            });
-            if (!response.ok) {
-                throw new Error('Error deleting user');
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esto! Se recomienda Descargar el Historial de Asignaciones",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:3000/personas/${id}`, {
+                    method: 'DELETE',
+                });
+                if (!response.ok) {
+                    throw new Error('Error deleting user');
+                }
+                fetchUsers();
+                Swal.fire(
+                    'Eliminado!',
+                    'El personal ha sido eliminado.',
+                    'success'
+                );
+            } catch (error) {
+                setError('Error deleting user');
+                console.error('Error:', error);
             }
-            fetchUsers();
-        } catch (error) {
-            setError('Error deleting user');
-            console.error('Error:', error);
         }
     };
 
@@ -188,7 +206,7 @@ const UsersTable = memo(() => {
                 </thead>
                 <tbody>
                     {memoizedUsers.map((user, index) => (
-                        <tr key={user.PersonaID || index}>
+                        <tr key={user.PersonaID || `tablaUser${index}`}>
                             {editingId === user.PersonaID ? (
                                 <>
                                     <td><input type="text" required value={editFormData.Nombre} name="Nombre" onChange={handleEditFormChange} /></td>
@@ -253,7 +271,7 @@ const UsersTable = memo(() => {
                         </thead>
                         <tbody>
                             {filteredData.map((user, index) => (
-                                <tr key={user.PersonaID || index}>
+                                <tr key={user.PersonaID || `tablaUser2${index}`}>
                                     <td>{user.Nombre}</td>
                                     <td>{user.Apellido}</td>
                                     <td>{user.Dni}</td>

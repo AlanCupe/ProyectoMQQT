@@ -27,7 +27,6 @@ const AssignBeaconTable = memo(() => {
     useEffect(() => {
         setFilteredData(assignments);
         setModalFilteredData(assignments);
-        
     }, [assignments]);
 
     const handleEditClick = (assignment) => {
@@ -51,7 +50,7 @@ const AssignBeaconTable = memo(() => {
             body: JSON.stringify(editFormData)
         });
         if (response.ok) {
-            Swal.fire('Updated!', 'Your assignment has been updated.', 'success');
+            Swal.fire('Actualizado!', 'La asignación ha sido actualizada.', 'success');
             setEditAssignmentId(null);
             setAssignments(prev => prev.map(assignment => {
                 if (assignment.AsignacionID === editAssignmentId) {
@@ -60,7 +59,7 @@ const AssignBeaconTable = memo(() => {
                 return assignment;
             }));
         } else {
-            Swal.fire('Error', 'Failed to update assignment.', 'error');
+            Swal.fire('Error', 'No se pudo actualizar la asignación.', 'error');
         }
     };
 
@@ -77,28 +76,34 @@ const AssignBeaconTable = memo(() => {
     };
 
     const handleDelete = async (id) => {
-        
-        if (!id) {
-            Swal.fire('Error', 'ID de asignación no válido.', 'error');
-            return;
-        }
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        });
 
-        try {
-            console.log("Deleting assignment with ID:", id); 
-            const response = await fetch(`http://localhost:3000/assignbeacon/${id}`, {
-                method: 'DELETE',
-            });
-            if (response.ok) {
-                setAssignments(prev => prev.filter(assignment => assignment.AsignacionID !== id));
-                Swal.fire('Deleted!', 'Your assignment has been deleted.', 'success');
-            } else {
-                const errorData = await response.text();
-                console.error('Failed to delete assignment:', errorData);
-                throw new Error(errorData);
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:3000/assignbeacon/${id}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    setAssignments(prev => prev.filter(assignment => assignment.AsignacionID !== id));
+                    Swal.fire('Eliminado!', 'La asignación ha sido eliminada.', 'success');
+                } else {
+                    const errorData = await response.text();
+                    console.error('Failed to delete assignment:', errorData);
+                    throw new Error(errorData);
+                }
+            } catch (error) {
+                console.error('Error deleting assignment:', error);
+                Swal.fire('Error', 'No se pudo eliminar la asignación.', 'error');
             }
-        } catch (error) {
-            console.error('Error deleting assignment:', error);
-            Swal.fire('Error', 'Failed to delete assignment.', 'error');
         }
     };
 
@@ -131,8 +136,8 @@ const AssignBeaconTable = memo(() => {
         return localDate.toLocaleString();
     };
 
-    if (loading) return <p>Loading assignments...</p>;
-    if (error) return <p>Error loading assignments: {error}</p>;
+    if (loading) return <p>Cargando asignaciones...</p>;
+    if (error) return <p>Error al cargar asignaciones: {error}</p>;
 
     return (
         <div>
@@ -150,10 +155,9 @@ const AssignBeaconTable = memo(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredData.map((assignment) => {
-                
+                    {filteredData.map((assignment,index) => {
                         return (
-                            <tr key={assignment.AsignacionID}>
+                            <tr key={assignment.AsignacionID || index}>
                                 {editAssignmentId === assignment.AsignacionID ? (
                                     <>
                                         <td><input type="text" name="PersonaName" value={editFormData.PersonaName} onChange={handleFormChange} /></td>
@@ -229,8 +233,8 @@ const AssignBeaconTable = memo(() => {
                         </tr>
                     </thead>
                     <tbody>
-                        {modalFilteredData.map(assignment => (
-                            <tr key={assignment.AsignacionID}>
+                        {modalFilteredData.map((assignment,index) => (
+                            <tr key={assignment.AsignacionID || index}>
                                 <td>{assignment.PersonaName}</td>
                                 <td>{assignment.BeaconMac}</td>
                                 <td>{formatLocalDateTime(assignment.Timestamp)}</td>
