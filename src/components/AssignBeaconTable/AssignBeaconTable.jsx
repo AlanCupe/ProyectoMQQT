@@ -29,52 +29,6 @@ const AssignBeaconTable = memo(() => {
         setModalFilteredData(assignments);
     }, [assignments]);
 
-    const handleEditClick = (assignment) => {
-        const isBeaconAssignedToOthers = assignments.some((assgn) => assgn.BeaconMac === assignment.BeaconMac && assgn.AsignacionID !== assignment.AsignacionID);
-        if (isBeaconAssignedToOthers) {
-            Swal.fire('Error', 'Este beacon ya está asignado a otra persona.', 'error');
-            return;
-        }
-        setEditAssignmentId(assignment.AsignacionID);
-        setEditFormData({
-            PersonaName: assignment.PersonaName,
-            BeaconMac: assignment.BeaconMac,
-            Timestamp: assignment.Timestamp
-        });
-    };
-
-    const handleSave = async () => {
-        const response = await fetch(`http://localhost:3000/assignbeacon/${editAssignmentId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(editFormData)
-        });
-        if (response.ok) {
-            Swal.fire('Actualizado!', 'La asignación ha sido actualizada.', 'success');
-            setEditAssignmentId(null);
-            setAssignments(prev => prev.map(assignment => {
-                if (assignment.AsignacionID === editAssignmentId) {
-                    return { ...assignment, ...editFormData };
-                }
-                return assignment;
-            }));
-        } else {
-            Swal.fire('Error', 'No se pudo actualizar la asignación.', 'error');
-        }
-    };
-
-    const handleCancel = () => {
-        setEditAssignmentId(null);
-    };
-
-    const handleFormChange = (event) => {
-        const { name, value } = event.target;
-        setEditFormData({
-            ...editFormData,
-            [name]: value
-        });
-    };
-
     const handleDelete = async (id) => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
@@ -155,34 +109,17 @@ const AssignBeaconTable = memo(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredData.map((assignment,index) => {
+                    {filteredData.map((assignment, index) => {
                         return (
                             <tr key={assignment.AsignacionID || index}>
-                                {editAssignmentId === assignment.AsignacionID ? (
-                                    <>
-                                        <td><input type="text" name="PersonaName" value={editFormData.PersonaName} onChange={handleFormChange} /></td>
-                                        <td><input type="text" name="BeaconMac" value={editFormData.BeaconMac} onChange={handleFormChange} /></td>
-                                        <td><input type="datetime-local" name="Timestamp" value={editFormData.Timestamp} onChange={handleFormChange} /></td>
-                                        <td>
-                                            <div className='containerButton'>
-                                                <img onClick={handleSave} src='/img/save.png' alt="Guardar" />
-                                                <img onClick={handleCancel} src='/img/cancelled.png' alt="Cancelar" />
-                                            </div>
-                                        </td>
-                                    </>
-                                ) : (
-                                    <>
-                                        <td>{assignment.PersonaName}</td>
-                                        <td>{assignment.BeaconMac}</td>
-                                        <td>{formatLocalDateTime(assignment.Timestamp)}</td>
-                                        <td>
-                                            <div className='containerButton'>
-                                                <img onClick={() => handleEditClick(assignment)} src='/img/edit.png' alt="Editar" />
-                                                <img onClick={() => handleDelete(assignment.AsignacionID)} src='/img/delete.png' alt="Eliminar" />
-                                            </div>
-                                        </td>
-                                    </>
-                                )}
+                                <td>{assignment.PersonaName}</td>
+                                <td>{assignment.BeaconMac}</td>
+                                <td>{formatLocalDateTime(assignment.Timestamp)}</td>
+                                <td>
+                                    <div className='containerButton'>
+                                        <img onClick={() => handleDelete(assignment.AsignacionID)} src='/img/delete.png' alt="Eliminar" />
+                                    </div>
+                                </td>
                             </tr>
                         );
                     })}
@@ -233,7 +170,7 @@ const AssignBeaconTable = memo(() => {
                         </tr>
                     </thead>
                     <tbody>
-                        {modalFilteredData.map((assignment,index) => (
+                        {modalFilteredData.map((assignment, index) => (
                             <tr key={assignment.AsignacionID || index}>
                                 <td>{assignment.PersonaName}</td>
                                 <td>{assignment.BeaconMac}</td>

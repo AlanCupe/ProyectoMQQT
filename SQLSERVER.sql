@@ -287,7 +287,7 @@ SELECT
                 eb.GatewayID, eb.iBeaconID;
 
 -----------
-ALTER TABLE Gateway ADD isOn BIT DEFAULT 0;
+
 
 SELECT * FROM Gateway;
 SELECT 
@@ -298,32 +298,6 @@ SELECT
     GatewayLoad,
     Timestamp
 FROM Gateway;
-
-
-
-
-
-
-SELECT name
-FROM sys.default_constraints
-WHERE parent_object_id = OBJECT_ID('Gateway') AND col_name(parent_object_id, parent_column_id) = 'isOn';
-
-
-
-ALTER TABLE Gateway
-DROP CONSTRAINT DF__Gateway__isOn__46486B8E;
-
-
-
-
-ALTER TABLE Gateway
-DROP COLUMN isOn;
-
-
-
-
-
-
 
 
 

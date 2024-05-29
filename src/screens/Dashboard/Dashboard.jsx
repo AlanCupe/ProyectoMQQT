@@ -49,7 +49,7 @@ export const Dashboard = memo(() => {
             if (gateway && gateway.isOnline) {
                 const beaconKey = evento.BeaconMacAddress;
                 if (!beaconMap[beaconKey] || beaconMap[beaconKey].Rssi < evento.Rssi) {
-                    beaconMap[beaconKey] = evento;
+                    beaconMap[beaconKey] = { ...evento, lastSeen: evento.Timestamp };
                 }
             }
         });
@@ -57,8 +57,8 @@ export const Dashboard = memo(() => {
         return Object.values(beaconMap);
     };
 
-    const countEntradaEvents = (gatewayID) => {
-        const entradaEvents = eventosBeacons.filter(evento => evento.GatewayID === gatewayID && evento.TipoEvento === 'Entrada');
+    const countEntradaEvents = (gatewayID, events) => {
+        const entradaEvents = events.filter(evento => evento.GatewayID === gatewayID && evento.TipoEvento === 'Entrada');
         return entradaEvents.length;
     };
 
@@ -80,7 +80,7 @@ export const Dashboard = memo(() => {
                 {areas.map(gateway => {
                     if (filterEnabled && !gateway.isOnline) return null; // Filtrar gateways apagados cuando el filtro está activado
                     const gatewayEvents = filteredData.filter(evento => evento.GatewayID === gateway.GatewayID);
-                    const totalEntradaEvents = countEntradaEvents(gateway.GatewayID);
+                    const totalEntradaEvents = countEntradaEvents(gateway.GatewayID, filteredData);
                     return (
                         <div key={gateway.GatewayID}>
                             <div className='containerInfoTable'>

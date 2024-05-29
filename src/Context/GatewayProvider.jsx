@@ -15,7 +15,7 @@ export const GatewayProvider = ({ children }) => {
         const fetchGateways = async () => {
             const response = await axios.get('http://localhost:3000/gatewayregister');
             const gatewaysWithStatus = response.data.map(gateway => {
-                const isOnline = new Date() - new Date(gateway.LastHeartbeat) < 10000; // 10 seg
+                const isOnline = new Date() - new Date(gateway.LastHeartbeat) < 3000; // 10 seg
                 return { ...gateway, isOnline };
             });
             setGateways(gatewaysWithStatus);
@@ -23,7 +23,7 @@ export const GatewayProvider = ({ children }) => {
 
         fetchGateways(); // Fetch initially
 
-        const interval = setInterval(fetchGateways, 1000); // Poll every 10 seconds
+        const interval = setInterval(fetchGateways, 500); // Poll every 10 seconds
 
         return () => clearInterval(interval); // Cleanup on unmount
     }, []);

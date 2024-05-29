@@ -5,7 +5,7 @@ const sql = require('mssql');
 
 
 const RSSI_THRESHOLD = -100;
-const CHECK_INTERVAL = 15000;
+const CHECK_INTERVAL = 4000;
 
 
 const handleMQTTMessage = async (req, res) => {
