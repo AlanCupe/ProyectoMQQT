@@ -28,7 +28,7 @@ const ProjectTable = memo(({ data }) => {
                         <td>{evento.TipoEvento}</td>
                         <td>{evento.Rssi}</td>
                         <td>{new Date(evento.Timestamp).toLocaleString()}</td>
-                        <td>{evento.PersonaNombreApellido?`${evento.PersonaNombreApellido}`:"No asignado"}</td>
+                        <td>{evento.PersonaNombreApellido ? `${evento.PersonaNombreApellido}` : "No asignado"}</td>
                     </tr>
                 ))}
             </tbody>

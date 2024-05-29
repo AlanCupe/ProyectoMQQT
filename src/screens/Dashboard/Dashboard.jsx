@@ -30,16 +30,17 @@ export const Dashboard = memo(() => {
         setAreas(updatedAreas);
     };
 
-    const getUniqueBeaconsByGateway = (gatewayID) => {
+    const getMaxRssiBeaconsByGateway = (gatewayID) => {
         const beacons = eventosBeacons.filter(evento => evento.GatewayID === gatewayID);
-        const latestEvents = beacons.reduce((acc, current) => {
-            const existing = acc[current.BeaconMacAddress];
-            if (!existing || new Date(existing.Timestamp) < new Date(current.Timestamp)) {
-                acc[current.BeaconMacAddress] = current;
+        const maxRssiBeacons = beacons.reduce((acc, current) => {
+            const existing = acc.find(beacon => beacon.BeaconMacAddress === current.BeaconMacAddress);
+            if (!existing || existing.Rssi < current.Rssi) {
+                acc = acc.filter(beacon => beacon.BeaconMacAddress !== current.BeaconMacAddress);
+                acc.push(current);
             }
             return acc;
-        }, {});
-        return Object.values(latestEvents);
+        }, []);
+        return maxRssiBeacons;
     };
 
     const countEntradaEvents = (gatewayID) => {
@@ -59,7 +60,7 @@ export const Dashboard = memo(() => {
     return (
         <div className='grid'>
             {areas.map(gateway => {
-                const totalEvents = getUniqueBeaconsByGateway(gateway.GatewayID);
+                const maxRssiEvents = getMaxRssiBeaconsByGateway(gateway.GatewayID);
                 const totalEntradaEvents = countEntradaEvents(gateway.GatewayID);
                 return (
                     <div key={gateway.GatewayID}>
@@ -68,24 +69,24 @@ export const Dashboard = memo(() => {
                             <h2 className='flexRow containerData'>
                                 <img className='imgRouter' src="/img/gateway.png" alt="gateway" />
                                 <span>{gateway.MacAddress}</span>
-                                <span>{gateway.isOnline ? <div className='letEnable'></div> : <div className='letDisable'></div>}</span>
+                                <span>{gateway.isOnline ? <div className='containerLet'><div className='letEnable'></div></div> : <div className='containerLet'><div className='letDisable'></div></div>}</span>
                             </h2>
                             <h3>{gateway.areaNombre}</h3>
                             <p className='flexRow imgP'>
                                 <img src="/img/user.png" alt="usuarioDetectados" />
-                                <span>Total Eventos: {totalEvents.length}</span>
+                                <span>Total Eventos: {maxRssiEvents.length}</span>
                             </p>
                             <p className='flexRow imgP'>
                                 <img src="/img/user.png" alt="usuarioDetectados" />
-                                <span>Total Entradas: {totalEntradaEvents}</span>
+                                <span>Personal: {totalEntradaEvents}</span>
                             </p>
                             <p className='flexRow imgP'>
                                 <span>{gateway.isOnline ? 'Encendido' : 'Apagado'}</span>
                             </p>
                         </div>
                         <div className='table-container'>
-                            {totalEvents.length > 0 ? (
-                                <ProjectTable data={totalEvents} />
+                            {maxRssiEvents.length > 0 ? (
+                                <ProjectTable data={maxRssiEvents} />
                             ) : (
                                 <div>
                                     <table className='project-table'>

@@ -66,3 +66,34 @@
             width: 15px;
         }
     }
+
+   .containerLet{
+        border-radius: 40px;
+        border: 4px solid rgb(63, 62, 62);
+       
+        .letEnable, .letDisable{
+            padding: 10px;
+            border-radius: 40px;
+
+        }
+        .letEnable{
+            background-color: rgb(2, 245, 42);
+          
+            animation: moveRight 300ms infinite alternate;
+            position: relative;
+        }
+        .letDisable{
+            background-color: rgb(146, 144, 144);
+        }
+    }
+
+    @keyframes moveRight {
+        0% {
+            opacity: 0.1;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    
+   

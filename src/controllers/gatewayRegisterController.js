@@ -4,14 +4,13 @@ const dbConnection = require('../config/dbconfig');
 exports.getGatewayRegister = async (req, res) => {
     try {
         const pool = await dbConnection.connect();
-        const result = await pool.request().query('SELECT * FROM Gateway');
+        const result = await pool.request().query('SELECT GatewayID, MacAddress, GatewayFree, GatewayLoad, Timestamp, LastHeartbeat FROM Gateway');
         res.json(result.recordset);
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).send('Error al obtener los gateways');
     }
 };
-
 exports.createGatewayRegister = async (req, res) => {
     const { MacAddress, GatewayFree, GatewayLoad, Timestamp } = req.body;
     try {
@@ -66,6 +65,7 @@ exports.deleteGatewayRegister = async (req, res) => {
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).send('Error al eliminar el gateway');
+        
     }
 };
 
