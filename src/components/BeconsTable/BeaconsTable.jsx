@@ -31,7 +31,14 @@ export const BeaconsTable = memo(() => {
 
     useEffect(() => {
         if (Array.isArray(beacons)) {
-            setFilteredData(beacons.filter(beacon => beacon && beacon.MacAddress && beacon.MacAddress.startsWith('C3000')));
+            // Eliminar duplicados por MacAddress en el componente
+            const uniqueBeacons = beacons.reduce((acc, beacon) => {
+                if (!acc.some(b => b.MacAddress === beacon.MacAddress)) {
+                    acc.push(beacon);
+                }
+                return acc;
+            }, []);
+            setFilteredData(uniqueBeacons.filter(beacon => beacon && beacon.MacAddress && beacon.MacAddress.startsWith('C3000')));
         }
     }, [beacons]);
 
@@ -55,7 +62,7 @@ export const BeaconsTable = memo(() => {
     const handleDelete = async (id) => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
-            text: "No podrás revertir esto! Se Recomienda Descargar el Historial de Asignaciones",
+            text: "No podrás revertir esto! Se Recomienda Descargar el Historial de Asignaciones, y si deseas eliminar un Beacon ¡Asegurate de que este apagado!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

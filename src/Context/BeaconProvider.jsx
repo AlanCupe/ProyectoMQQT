@@ -11,7 +11,14 @@ export const BeaconProvider = ({ children }) => {
             try {
                 const response = await fetch('http://localhost:3000/beacons');
                 const data = await response.json();
-                setBeacons(data);
+                // Eliminar duplicados por MacAddress
+                const uniqueBeacons = data.reduce((acc, beacon) => {
+                    if (!acc.some(b => b.MacAddress === beacon.MacAddress)) {
+                        acc.push(beacon);
+                    }
+                    return acc;
+                }, []);
+                setBeacons(uniqueBeacons);
             } catch (error) {
                 console.error('Error fetching beacons:', error);
             }

@@ -26,7 +26,7 @@ export const Dashboard = memo(() => {
 
     useEffect(() => {
         if (filterEnabled) {
-            const filtered = getBeaconsWithMaxRssiForOnlineGateways();
+            const filtered = applyCustomFilter(eventosBeacons);
             setFilteredData(filtered);
         } else {
             setFilteredData(eventosBeacons);
@@ -41,20 +41,46 @@ export const Dashboard = memo(() => {
         setAreas(updatedAreas);
     };
 
-    const getBeaconsWithMaxRssiForOnlineGateways = () => {
+    const applyCustomFilter = (events) => {
         const beaconMap = {};
 
-        eventosBeacons.forEach(evento => {
-            const gateway = gateways.find(gw => gw.GatewayID === evento.GatewayID);
-            if (gateway && gateway.isOnline) {
-                const beaconKey = evento.BeaconMacAddress;
-                if (!beaconMap[beaconKey] || beaconMap[beaconKey].Rssi < evento.Rssi) {
-                    beaconMap[beaconKey] = { ...evento, lastSeen: evento.Timestamp };
+        events.forEach(event => {
+            const beaconKey = event.BeaconMacAddress;
+            const gateway = gateways.find(gw => gw.GatewayID === event.GatewayID && gw.isOnline);
+
+            if (gateway) {
+                if (!beaconMap[beaconKey]) {
+                    beaconMap[beaconKey] = {
+                        entry: null,
+                        exit: null,
+                        highestRssi: -Infinity,
+                        latestTimestamp: null,
+                    };
+                }
+
+                const beaconData = beaconMap[beaconKey];
+
+                if (event.TipoEvento === 'Entrada' && event.Rssi > beaconData.highestRssi) {
+                    beaconData.highestRssi = event.Rssi;
+                    beaconData.entry = event;
+                } else if (event.TipoEvento === 'Salida' && (!beaconData.latestTimestamp || new Date(event.Timestamp) > new Date(beaconData.latestTimestamp))) {
+                    beaconData.latestTimestamp = event.Timestamp;
+                    beaconData.exit = event;
                 }
             }
         });
 
-        return Object.values(beaconMap);
+        const filtered = [];
+        for (const key in beaconMap) {
+            if (beaconMap[key].entry) {
+                filtered.push(beaconMap[key].entry);
+            }
+            if (beaconMap[key].exit) {
+                filtered.push(beaconMap[key].exit);
+            }
+        }
+
+        return filtered;
     };
 
     const countEntradaEvents = (gatewayID, events) => {
@@ -67,6 +93,27 @@ export const Dashboard = memo(() => {
         return asignacion ? asignacion.areaTrabajo : 'No asignada';
     };
 
+    const handleDownloadExcel = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/historial/eventosexcel', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                }
+            });
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'historial_eventos.xlsx';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        } catch (error) {
+            console.error('Error al descargar el archivo Excel:', error);
+        }
+    };
+
     if (loading) {
         return <div className='grid'>Cargando...</div>;
     }
@@ -74,15 +121,17 @@ export const Dashboard = memo(() => {
     return (
         <>
             <button onClick={() => setFilterEnabled(!filterEnabled)} className='filtrobutton'>
-                {filterEnabled ? 'Apagados y Encendidos' : 'Encendidos'}
+                {filterEnabled ? 'Mostrar Todos' : 'Aplicar Filtro'}
+            </button>
+            <button onClick={handleDownloadExcel} className='downloadbutton'>
+                Descargar Eventos en Excel
             </button>
             <div className='grid'>
-                {areas.map(gateway => {
-                    if (filterEnabled && !gateway.isOnline) return null; // Filtrar gateways apagados cuando el filtro está activado
+                {areas.filter(gateway => !filterEnabled || gateway.isOnline).map(gateway => {
                     const gatewayEvents = filteredData.filter(evento => evento.GatewayID === gateway.GatewayID);
                     const totalEntradaEvents = countEntradaEvents(gateway.GatewayID, filteredData);
                     return (
-                        <div key={gateway.GatewayID}>
+                        <div key={gateway.GatewayID} className='conteinerGateways'>
                             <div className='containerInfoTable'>
                                 <div className='containerImgTable'></div>
                                 <h2 className='flexRow containerData'>

@@ -78,3 +78,76 @@ exports.getHistorialAsignacionesExcel = async (req, res) => {
         res.status(500).send('Error al generar el archivo Excel');
     }
 };
+
+exports.getHistorialEventosExcel = async (req, res) => {
+    try {
+        const pool = await dbConnection.connect();
+        const query = `
+            SELECT 
+                eb.iBeaconID,
+                ib.MacAddress AS BeaconMacAddress,
+                ib.Rssi,
+                eb.Timestamp,
+                eb.GatewayID,
+                gw.MacAddress AS GatewayMacAddress,
+                eb.TipoEvento,
+                CASE 
+                    WHEN pa.Nombre IS NULL AND pa.Apellido IS NULL THEN 'No asignado'
+                    ELSE ISNULL(pa.Nombre, '') + ' ' + ISNULL(pa.Apellido, '') 
+                END AS PersonaNombreApellido
+            FROM 
+                EventosBeacons eb
+            INNER JOIN 
+                iBeacon ib ON eb.iBeaconID = ib.iBeaconID
+            INNER JOIN 
+                Gateway gw ON eb.GatewayID = gw.GatewayID
+            LEFT JOIN 
+                AsignacionPersonasBeacons apb ON ib.iBeaconID = apb.iBeaconID
+            LEFT JOIN 
+                Personas pa ON apb.PersonaID = pa.PersonaID
+            ORDER BY 
+                eb.iBeaconID, eb.Timestamp;
+        `;
+        const result = await pool.request().query(query);
+        const eventos = result.recordset;
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Historial de Eventos');
+
+        worksheet.columns = [
+            { header: 'iBeaconID', key: 'iBeaconID', width: 10 },
+            { header: 'BeaconMacAddress', key: 'BeaconMacAddress', width: 20 },
+            { header: 'RSSI', key: 'Rssi', width: 10 },
+            { header: 'Timestamp', key: 'Timestamp', width: 30 },
+            { header: 'GatewayID', key: 'GatewayID', width: 10 },
+            { header: 'GatewayMacAddress', key: 'GatewayMacAddress', width: 20 },
+            { header: 'TipoEvento', key: 'TipoEvento', width: 10 },
+            { header: 'PersonaNombreApellido', key: 'PersonaNombreApellido', width: 30 },
+        ];
+
+        eventos.forEach(entry => {
+            worksheet.addRow({
+                iBeaconID: entry.iBeaconID,
+                BeaconMacAddress: entry.BeaconMacAddress,
+                Rssi: entry.Rssi,
+                Timestamp: new Date(entry.Timestamp),  // Asegúrate de convertir Timestamp a un objeto Date
+                GatewayID: entry.GatewayID,
+                GatewayMacAddress: entry.GatewayMacAddress,
+                TipoEvento: entry.TipoEvento,
+                PersonaNombreApellido: entry.PersonaNombreApellido
+            });
+        });
+
+        // Formato para la columna de fecha y hora
+        worksheet.getColumn('Timestamp').numFmt = 'dd/mm/yyyy hh:mm:ss';
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=historial_eventos.xlsx');
+
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (error) {
+        console.error('Error al generar el archivo Excel:', error);
+        res.status(500).send('Error al generar el archivo Excel');
+    }
+};

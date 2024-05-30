@@ -9,7 +9,8 @@ const config = {
     options: {
         trustedConnection: process.env.DB_TRUSTED_CONNECTION === 'true',
         trustServerCertificate: process.env.DB_TRUST_SERVER_CERTIFICATE === 'true',
-    }
+    },
+    requestTimeout: 60000 
 };
 
 const dbConnection = new sql.ConnectionPool(config);
