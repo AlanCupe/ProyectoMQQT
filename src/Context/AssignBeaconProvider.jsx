@@ -6,16 +6,20 @@ const AssignBeaconProvider = ({ children }) => {
     const [assignments, setAssignments] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [page, setPage] = useState(1);
+    const [pageSize] = useState(50); /*CAMBIANDO PAGINACION DE 50 A 5, SI DESEAS*/
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         const fetchAssignments = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch('http://localhost:3000/assignbeacon');
+                const response = await fetch(`http://localhost:3000/assignbeacon?page=${page}&pageSize=${pageSize}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setAssignments(data);
+                    setAssignments(data.data);
+                    setTotal(data.total);
                 } else {
                     throw new Error('Failed to fetch assignments');
                 }
@@ -27,10 +31,10 @@ const AssignBeaconProvider = ({ children }) => {
         };
 
         fetchAssignments();
-    }, []);
+    }, [page, pageSize]);
 
     return (
-        <AssignBeaconContext.Provider value={{ assignments, loading, error, setAssignments }}>
+        <AssignBeaconContext.Provider value={{ assignments, loading, error, setAssignments, page, setPage, total, pageSize }}>
             {children}
         </AssignBeaconContext.Provider>
     );

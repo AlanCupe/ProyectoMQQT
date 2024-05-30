@@ -8,13 +8,7 @@ import "./AssignBeaconTable.css";
 Modal.setAppElement('#root');
 
 const AssignBeaconTable = memo(() => {
-    const { assignments, loading, error, setAssignments } = useContext(AssignBeaconContext);
-    const [editAssignmentId, setEditAssignmentId] = useState(null);
-    const [editFormData, setEditFormData] = useState({
-        PersonaName: '',
-        BeaconMac: '',
-        Timestamp: ''
-    });
+    const { assignments, loading, error, setAssignments, page, setPage, total, pageSize } = useContext(AssignBeaconContext);
     const [filters, setFilters] = useState({
         PersonaName: '',
         BeaconMac: '',
@@ -61,6 +55,38 @@ const AssignBeaconTable = memo(() => {
         }
     };
 
+    const handleDeleteAll = async () => {
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar todas!'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch('http://localhost:3000/assignbeacon', {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    setAssignments([]);
+                    Swal.fire('Eliminadas!', 'Todas las asignaciones han sido eliminadas.', 'success');
+                } else {
+                    const errorData = await response.text();
+                    console.error('Failed to delete all assignments:', errorData);
+                    throw new Error(errorData);
+                }
+            } catch (error) {
+                console.error('Error deleting all assignments:', error);
+                Swal.fire('Error', 'No se pudo eliminar todas las asignaciones.', 'error');
+            }
+        }
+    };
+
     const handleFilterChange = (event) => {
         const { name, value } = event.target;
         setFilters(prevState => ({
@@ -90,6 +116,18 @@ const AssignBeaconTable = memo(() => {
         return localDate.toLocaleString();
     };
 
+    const handleNextPage = () => {
+        if (page < Math.ceil(total / pageSize)) {
+            setPage(page + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (page > 1) {
+            setPage(page - 1);
+        }
+    };
+
     if (loading) return <p>Cargando asignaciones...</p>;
     if (error) return <p>Error al cargar asignaciones: {error}</p>;
 
@@ -98,6 +136,7 @@ const AssignBeaconTable = memo(() => {
             <h2 className='tituloTabla'>ASIGNACIONES</h2>
             <div>
                 <button className='btn-filter' onClick={() => setModalIsOpen(true)}>Filtrar y Descargar</button>
+                <button className='btn-delete-all' onClick={handleDeleteAll}>Eliminar Todas las Asignaciones</button>
             </div>
             <table className='tabla'>
                 <thead>
@@ -125,6 +164,15 @@ const AssignBeaconTable = memo(() => {
                     })}
                 </tbody>
             </table>
+            <div className="pagination">
+                <button onClick={handlePreviousPage} disabled={page === 1}>
+                    Anterior
+                </button>
+                <span>Página {page} de {Math.ceil(total / pageSize)}</span>
+                <button onClick={handleNextPage} disabled={page === Math.ceil(total / pageSize)}>
+                    Siguiente
+                </button>
+            </div>
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}

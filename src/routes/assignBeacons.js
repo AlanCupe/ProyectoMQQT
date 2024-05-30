@@ -8,5 +8,5 @@ router.get('/unassigned', assignBeaconsController.getUnassignedPeopleAndBeacons)
 router.post('/', assignBeaconsController.createAssignBeacon);
 router.put('/:id', assignBeaconsController.updateAssignBeacon);
 router.delete('/:id', assignBeaconsController.deleteAssignBeacon);
-
+router.delete('/', assignBeaconsController.deleteAllAssignments);
 module.exports = router;

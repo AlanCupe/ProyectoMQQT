@@ -3,6 +3,9 @@ const sql = require('mssql');
 const dbConnection = require('../config/dbconfig');
 
 exports.getHistorialAsignaciones = async (req, res) => {
+    const { page = 1, pageSize =  10} = req.query;  // Obtener los parámetros de paginación de la consulta
+    const offset = (page - 1) * pageSize;
+
     try {
         const pool = await dbConnection.connect();
         const query = `
@@ -16,14 +19,32 @@ exports.getHistorialAsignaciones = async (req, res) => {
                 historial_asignaciones h
                 JOIN Personas p ON h.PersonaID = p.PersonaID
                 JOIN iBeacon i ON h.iBeaconID = i.iBeaconID
+            ORDER BY h.HistorialID
+            OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
         `;
-        const result = await pool.request().query(query);
-        res.json(result.recordset);
+        const result = await pool.request()
+            .input('offset', sql.Int, offset)
+            .input('pageSize', sql.Int, parseInt(pageSize, 10))
+            .query(query);
+        
+        const countQuery = `
+            SELECT COUNT(*) AS total 
+            FROM historial_asignaciones;
+        `;
+        const countResult = await pool.request().query(countQuery);
+
+        res.json({
+            data: result.recordset,
+            total: countResult.recordset[0].total,
+            page: parseInt(page, 10),
+            pageSize: parseInt(pageSize, 10)
+        });
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).send('Error al obtener el historial de asignaciones');
     }
 };
+
 
 exports.getHistorialAsignacionesExcel = async (req, res) => {
     try {
@@ -151,6 +172,23 @@ exports.getHistorialEventosExcel = async (req, res) => {
         res.status(500).send('Error al generar el archivo Excel');
     }
 };
+
+exports.getArchivoHistorialAsignaciones = async (req, res) => {
+    try {
+        const pool = await dbConnection.connect();
+        const query = `SELECT * FROM archivo_historial_asignaciones;`;
+        const result = await pool.request().query(query);
+        res.json(result.recordset);
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).send('Error al obtener el archivo historial de asignaciones');
+    }
+};
+
+
+
+
+
 
 exports.getArchivoHistorialAsignacionesExcel = async (req, res) => {
     try {

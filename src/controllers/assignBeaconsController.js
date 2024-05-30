@@ -2,6 +2,10 @@ const sql = require('mssql');
 const dbConnection = require('../config/dbconfig');
 
 exports.getAssignBeacon = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = 50; /*CAMBIANDO EL VALOR DE 50 A 5, SI QUIERES QUE SOLO SEAN 5 */
+    const offset = (page - 1) * pageSize;
+
     try {
         const pool = await dbConnection.connect();
         const query = `
@@ -14,9 +18,26 @@ exports.getAssignBeacon = async (req, res) => {
                 AsignacionPersonasBeacons
                 JOIN Personas ON AsignacionPersonasBeacons.PersonaID = Personas.PersonaID
                 JOIN iBeacon ON AsignacionPersonasBeacons.iBeaconID = iBeacon.iBeaconID
+            ORDER BY AsignacionPersonasBeacons.Timestamp DESC
+            OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
         `;
-        const result = await pool.request().query(query);
-        res.json(result.recordset);
+        const result = await pool.request()
+            .input('offset', sql.Int, offset)
+            .input('pageSize', sql.Int, pageSize)
+            .query(query);
+
+        const countQuery = `
+            SELECT COUNT(*) AS total
+            FROM AsignacionPersonasBeacons;
+        `;
+        const countResult = await pool.request().query(countQuery);
+
+        res.json({
+            data: result.recordset,
+            total: countResult.recordset[0].total,
+            page,
+            pageSize
+        });
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).send('Error al obtener las asignaciones');
@@ -207,5 +228,16 @@ exports.deleteAssignBeacon = async (req, res) => {
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).send('Error al eliminar la asignación');
+    }
+};
+exports.deleteAllAssignments = async (req, res) => {
+    try {
+        const pool = await dbConnection.connect();
+        const query = 'DELETE FROM AsignacionPersonasBeacons';
+        await pool.request().query(query);
+        res.json({ message: 'Todas las asignaciones han sido eliminadas correctamente' });
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).send('Error al eliminar todas las asignaciones');
     }
 };

@@ -8,7 +8,7 @@ import './UserTable.css';
 Modal.setAppElement('#root'); // Asegúrate de que el id coincida con el id del elemento root en tu index.html
 
 const UsersTable = memo(() => {
-    const { users, fetchUsers } = useContext(UserContext);
+    const { users, setUsers } = useContext(UserContext);
     const [editingId, setEditingId] = useState(null);
     const [editFormData, setEditFormData] = useState({
         Nombre: '',
@@ -30,6 +30,11 @@ const UsersTable = memo(() => {
         Empresa: '',
     });
 
+    // Estados para la paginación
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 50;
+    const [totalPages, setTotalPages] = useState(1);
+
     const memoizedUsers = useMemo(() => {
         return users.map(user => ({
             ...user,
@@ -38,8 +43,26 @@ const UsersTable = memo(() => {
     }, [users]);
 
     useEffect(() => {
+        fetchUsersWithPagination(currentPage, itemsPerPage);
+    }, [currentPage]);
+
+    useEffect(() => {
         setFilteredData(reportData);
     }, [reportData]);
+
+    const fetchUsersWithPagination = async (page, limit) => {
+        try {
+            const response = await fetch(`http://localhost:3000/personas?page=${page}&limit=${limit}`);
+            if (!response.ok) {
+                throw new Error('Error fetching users');
+            }
+            const data = await response.json();
+            setUsers(data.data);
+            setTotalPages(data.totalPages);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     const handleEditFormChange = (event) => {
         const { name, value } = event.target;
@@ -106,7 +129,7 @@ const UsersTable = memo(() => {
                 if (!response.ok) {
                     throw new Error('Error deleting user');
                 }
-                fetchUsers();
+                fetchUsersWithPagination(currentPage, itemsPerPage);
                 Swal.fire(
                     'Eliminado!',
                     'El personal ha sido eliminado.',
@@ -114,6 +137,38 @@ const UsersTable = memo(() => {
                 );
             } catch (error) {
                 setError('Error deleting user');
+                console.error('Error:', error);
+            }
+        }
+    };
+
+    const handleDeleteAll = async () => {
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡Esto eliminará todos los registros de personal y sus asignaciones!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar todo!'
+        });
+    
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch('http://localhost:3000/personas', {
+                    method: 'DELETE',
+                });
+                if (!response.ok) {
+                    throw new Error('Error deleting all users');
+                }
+                fetchUsersWithPagination(currentPage, itemsPerPage);
+                Swal.fire(
+                    'Eliminado!',
+                    'Todos los registros de personal y sus asignaciones han sido eliminados.',
+                    'success'
+                );
+            } catch (error) {
+                setError('Error deleting all users');
                 console.error('Error:', error);
             }
         }
@@ -133,7 +188,7 @@ const UsersTable = memo(() => {
             if (!response.ok) {
                 throw new Error('Error saving changes');
             }
-            fetchUsers();
+            fetchUsersWithPagination(currentPage, itemsPerPage);
             setEditingId(null);
         } catch (error) {
             setError('Error saving changes');
@@ -184,6 +239,10 @@ const UsersTable = memo(() => {
         XLSX.writeFile(workbook, 'report.xlsx');
     };
 
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
     return (
         <>
             <div style={{ color: 'red' }}>{error}</div>
@@ -192,6 +251,7 @@ const UsersTable = memo(() => {
             </div>
             <div className="filters">
                 <button className='btn-filter' onClick={fetchReportData}>Filtrar y Descargar</button>
+                <button className='btn-delete-all' onClick={handleDeleteAll}>Eliminar Todo</button>
             </div>
             <table className="tabla">
                 <thead>
@@ -240,6 +300,21 @@ const UsersTable = memo(() => {
                     ))}
                 </tbody>
             </table>
+            <div className="pagination">
+                <button 
+                    onClick={() => handlePageChange(currentPage - 1)} 
+                    disabled={currentPage === 1}
+                >
+                    Anterior
+                </button>
+                <span>{`Página ${currentPage} de ${totalPages}`}</span>
+                <button 
+                    onClick={() => handlePageChange(currentPage + 1)} 
+                    disabled={currentPage === totalPages}
+                >
+                    Siguiente
+                </button>
+            </div>
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}

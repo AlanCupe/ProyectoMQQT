@@ -274,3 +274,49 @@ tr:hover {
 .close-button:hover {
     color: red;
 }
+
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.btn-filter, .btn-delete-all {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.btn-delete-all {
+    background-color: #d33;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.btn-delete-all:hover {
+    background-color: #a00;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.pagination span {
+    margin: 0 10px;
+}
+
+.pagination .active {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}

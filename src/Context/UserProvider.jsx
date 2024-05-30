@@ -9,12 +9,12 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:3000/personas');
+                const response = await fetch('http://localhost:3000/personas?page=1&limit=50');
                 if (!response.ok) {
                     throw new Error('Error fetching users');
                 }
                 const data = await response.json();
-                setUsers(data);
+                setUsers(data.data);
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -27,21 +27,21 @@ export const UserProvider = ({ children }) => {
         setUpdateTrigger(prev => !prev);
     };
 
-    const fetchUsers = async () => {
+    const fetchUsers = async (page, limit) => {
         try {
-            const response = await fetch('http://localhost:3000/personas');
+            const response = await fetch(`http://localhost:3000/personas?page=${page}&limit=${limit}`);
             if (!response.ok) {
                 throw new Error('Error fetching users');
             }
             const data = await response.json();
-            setUsers(data);
+            setUsers(data.data);
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
     return (
-        <UserContext.Provider value={{ users, addUser, fetchUsers }}>
+        <UserContext.Provider value={{ users, setUsers, addUser, fetchUsers }}>
             {children}
         </UserContext.Provider>
     );

@@ -6,16 +6,20 @@ const HistorialProvider = ({ children }) => {
     const [historial, setHistorial] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [page, setPage] = useState(1);
+    const [pageSize] = useState(10);
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         const fetchHistorial = async () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch('http://localhost:3000/historial');
+                const response = await fetch(`http://localhost:3000/historial?page=${page}&pageSize=${pageSize}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setHistorial(data);
+                    setHistorial(data.data);
+                    setTotal(data.total);
                 } else {
                     throw new Error('Failed to fetch historial');
                 }
@@ -27,10 +31,10 @@ const HistorialProvider = ({ children }) => {
         };
 
         fetchHistorial();
-    }, []);
+    }, [page, pageSize]);
 
     return (
-        <HistorialContext.Provider value={{ historial, loading, error }}>
+        <HistorialContext.Provider value={{ historial, loading, error, page, pageSize, total, setPage }}>
             {children}
         </HistorialContext.Provider>
     );

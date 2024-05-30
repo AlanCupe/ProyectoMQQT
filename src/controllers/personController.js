@@ -2,10 +2,25 @@ const sql = require('mssql');
 const dbConnection = require('../config/dbconfig');
 
 exports.getPeople = async (req, res) => {
+    const { page = 1, limit = 50 } = req.query; // Valores predeterminados
+    const offset = (page - 1) * limit;
+
     try {
         const pool = await dbConnection.connect();
-        const result = await pool.request().query('SELECT * FROM Personas');
-        res.json(result.recordset);
+        const result = await pool.request()
+            .input('limit', sql.Int, limit)
+            .input('offset', sql.Int, offset)
+            .query('SELECT * FROM Personas ORDER BY PersonaID OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY');
+
+        const countResult = await pool.request().query('SELECT COUNT(*) as total FROM Personas');
+        const total = countResult.recordset[0].total;
+
+        res.json({
+            data: result.recordset,
+            total,
+            page: parseInt(page, 10),
+            totalPages: Math.ceil(total / limit)
+        });
     } catch (error) {
         console.error('Database error:', error);
         res.status(500).send('Error al obtener datos de personas');
@@ -77,10 +92,11 @@ exports.updatePerson = async (req, res) => {
 
 exports.deletePerson = async (req, res) => {
     const { id } = req.params;
+    let transaction;  // Definir la variable transaction
 
     try {
         const pool = await dbConnection.connect();
-        const transaction = pool.transaction();
+        transaction = pool.transaction();
         await transaction.begin();
 
         // Elimina todas las asignaciones de beacons relacionadas con la persona
@@ -89,8 +105,8 @@ exports.deletePerson = async (req, res) => {
             .query('DELETE FROM AsignacionPersonasBeacons WHERE PersonaID = @id');
 
         await transaction.request()
-        .input('id', sql.Int, id)
-        .query('DELETE FROM historial_asignaciones WHERE PersonaID = @id');
+            .input('id', sql.Int, id)
+            .query('DELETE FROM historial_asignaciones WHERE PersonaID = @id');
 
         // Finalmente elimina la persona
         await transaction.request()
@@ -105,5 +121,47 @@ exports.deletePerson = async (req, res) => {
             await transaction.rollback();
         }
         res.status(500).send('Error al eliminar persona');
-    } 
+    }
 };
+
+
+/*ELIMINACION TOTAL DE PERSONAS */
+exports.deleteAllPeople = async (req, res) => {
+    let transaction;
+
+    try {
+        const pool = await dbConnection.connect();
+        transaction = pool.transaction();
+        await transaction.begin();
+
+        // Elimina todas las asignaciones de beacons relacionadas con las personas
+        await transaction.request().query('DELETE FROM AsignacionPersonasBeacons');
+        console.log('Asignaciones de personas eliminadas');
+
+        // Elimina todos los registros de historial de asignaciones relacionados con las personas
+        await transaction.request().query('DELETE FROM historial_asignaciones');
+        console.log('Historial de asignaciones eliminado');
+
+        // Finalmente elimina todas las personas
+        await transaction.request().query('DELETE FROM Personas');
+        console.log('Personas eliminadas');
+
+        await transaction.commit();
+
+        // Validación de la eliminación
+        const validationResult = await pool.request().query('SELECT COUNT(*) as count FROM Personas');
+        const count = validationResult.recordset[0].count;
+        if (count === 0) {
+            res.status(204).send(); // No Content
+        } else {
+            throw new Error('No se pudieron eliminar todos los registros');
+        }
+    } catch (error) {
+        console.error('Database error:', error);
+        if (transaction) {
+            await transaction.rollback();
+        }
+        res.status(500).send('Error al eliminar todas las personas');
+    }
+};
+
