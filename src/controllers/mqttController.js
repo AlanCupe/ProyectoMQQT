@@ -1,12 +1,8 @@
 const dbConnection = require('../config/dbconfig');
 const sql = require('mssql');
 
-
-
-
 const RSSI_THRESHOLD = -100;
 const CHECK_INTERVAL = 4000;
-
 
 const handleMQTTMessage = async (req, res) => {
     const { topic, message } = req.body;
@@ -39,7 +35,7 @@ const handleMQTTMessage = async (req, res) => {
                                             WHERE MacAddress = @MacAddress
                                         END`;
 
-                    await dbConnection.request()
+                await dbConnection.request()
                     .input('MacAddress', sql.NVarChar(50), gatewayData.MacAddress)
                     .input('GatewayFree', sql.Int, gatewayData.GatewayFree)
                     .input('GatewayLoad', sql.Float, gatewayData.GatewayLoad)
@@ -48,7 +44,7 @@ const handleMQTTMessage = async (req, res) => {
                     .query(gatewayQuery);
                     
             } else if (item.type === 'iBeacon' && item.mac.startsWith('C30000')) {
-                // Proceso para los datos del iBeacon solo si empieza con 'c30000'
+                // Proceso para los datos del iBeacon solo si empieza con 'C30000'
                 const iBeaconData = {
                     MacAddress: item.mac,
                     RSSI: item.rssi,
@@ -99,7 +95,7 @@ const handleMQTTMessage = async (req, res) => {
                         // Registrar evento de entrada
                         const newEventType = 'Entrada';
                         const lastEventQuery = `SELECT TOP 1 TipoEvento, Timestamp FROM EventosBeacons 
-                                                WHERE iBeaconID = (SELECT iBeaconID FROM iBeacon WHERE MacAddress = @MacAddress AND GatewayID = @GatewayID) 
+                                                WHERE iBeaconID = (SELECT TOP 1 iBeaconID FROM iBeacon WHERE MacAddress = @MacAddress AND GatewayID = @GatewayID) 
                                                 ORDER BY Timestamp DESC`;
                         const lastEventResult = await dbConnection.request()
                             .input('MacAddress', sql.NVarChar(50), iBeaconData.MacAddress)
@@ -111,7 +107,7 @@ const handleMQTTMessage = async (req, res) => {
 
                         if (lastEventType !== newEventType && (!lastEventTimestamp || (now - lastEventTimestamp) > CHECK_INTERVAL)) {
                             const eventoQuery = `INSERT INTO EventosBeacons (iBeaconID, GatewayID, TipoEvento, Timestamp)
-                                                 VALUES ((SELECT iBeaconID FROM iBeacon WHERE MacAddress = @MacAddress AND GatewayID = @GatewayID), @GatewayID, @TipoEvento, @Timestamp)`;
+                                                 VALUES ((SELECT TOP 1 iBeaconID FROM iBeacon WHERE MacAddress = @MacAddress AND GatewayID = @GatewayID), @GatewayID, @TipoEvento, @Timestamp)`;
 
                             await dbConnection.request()
                                 .input('MacAddress', sql.NVarChar(50), iBeaconData.MacAddress)
@@ -127,7 +123,7 @@ const handleMQTTMessage = async (req, res) => {
                     console.log(`El beacon con MacAddress: ${iBeaconData.MacAddress} tiene RSSI bajo el umbral y no se considera en rango.`);
                 }
             } else {
-                console.error('Tipo de dispositivo no reconocido o MacAddress no empieza con c30000');
+                console.error('Tipo de dispositivo no reconocido o MacAddress no empieza con C30000');
             }
         }
 
