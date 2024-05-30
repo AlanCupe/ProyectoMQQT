@@ -28,7 +28,7 @@ export const Mqttdata = () => {
     useEffect(() => {
         if (gatewayMacAddresses.length === 0) return;
 
-        const client = mqtt.connect('mqtt://localhost:9001');
+        const client = mqtt.connect('ws://localhost:9001');
         setMqttClient(client);
 
         client.on('connect', () => {
