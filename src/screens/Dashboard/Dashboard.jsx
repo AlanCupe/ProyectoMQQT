@@ -63,9 +63,13 @@ export const Dashboard = memo(() => {
                 if (event.TipoEvento === 'Entrada' && event.Rssi > beaconData.highestRssi) {
                     beaconData.highestRssi = event.Rssi;
                     beaconData.entry = event;
-                } else if (event.TipoEvento === 'Salida' && (!beaconData.latestTimestamp || new Date(event.Timestamp) > new Date(beaconData.latestTimestamp))) {
-                    beaconData.latestTimestamp = event.Timestamp;
-                    beaconData.exit = event;
+                    beaconData.exit = null; // Reset salida cuando hay una nueva entrada
+                } else if (event.TipoEvento === 'Salida') {
+                    const eventDate = new Date(event.Timestamp);
+                    if (!beaconData.exit || eventDate > new Date(beaconData.exit.Timestamp)) {
+                        beaconData.exit = event;
+                        beaconData.latestTimestamp = event.Timestamp;
+                    }
                 }
             }
         });
@@ -74,8 +78,7 @@ export const Dashboard = memo(() => {
         for (const key in beaconMap) {
             if (beaconMap[key].entry) {
                 filtered.push(beaconMap[key].entry);
-            }
-            if (beaconMap[key].exit) {
+            } else if (beaconMap[key].exit) {
                 filtered.push(beaconMap[key].exit);
             }
         }
