@@ -151,3 +151,45 @@ exports.getHistorialEventosExcel = async (req, res) => {
         res.status(500).send('Error al generar el archivo Excel');
     }
 };
+
+exports.getArchivoHistorialAsignacionesExcel = async (req, res) => {
+    try {
+        const pool = await dbConnection.connect();
+        const query = `
+            SELECT * 
+            FROM archivo_historial_asignaciones;
+        `;
+        const result = await pool.request().query(query);
+        const historial = result.recordset;
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Archivo Historial de Asignaciones');
+
+        worksheet.columns = [
+            { header: 'ArchivoID', key: 'ArchivoID', width: 10 },
+            { header: 'PersonaID', key: 'PersonaID', width: 10 },
+            { header: 'iBeaconID', key: 'iBeaconID', width: 10 },
+            { header: 'Fecha de Asignación', key: 'fechaAsignacion', width: 30 },
+            { header: 'Fecha de Baja', key: 'fechaBaja', width: 30 },
+        ];
+
+        historial.forEach(entry => {
+            worksheet.addRow({
+                ArchivoID: entry.ArchivoID,
+                PersonaID: entry.PersonaID,
+                iBeaconID: entry.iBeaconID,
+                fechaAsignacion: entry.fechaAsignacion,
+                fechaBaja: entry.fechaBaja,
+            });
+        });
+
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=archivo_historial_asignaciones.xlsx');
+
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (error) {
+        console.error('Error al generar el archivo Excel:', error);
+        res.status(500).send('Error al generar el archivo Excel');
+    }
+};

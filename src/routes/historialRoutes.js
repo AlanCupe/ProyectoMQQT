@@ -5,5 +5,5 @@ const historialController = require('../controllers/historialController');
 router.get('/', historialController.getHistorialAsignaciones);
 router.get('/excel', historialController.getHistorialAsignacionesExcel);
 router.get('/eventosexcel', historialController.getHistorialEventosExcel);
-
+router.get('/archivoexcel', historialController.getArchivoHistorialAsignacionesExcel);
 module.exports = router;

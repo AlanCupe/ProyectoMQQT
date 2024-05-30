@@ -16,6 +16,16 @@ const HistorialTable = () => {
         }
     };
 
+    const downloadArchivoExcel = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/historial/archivoexcel');
+            const blob = await response.blob();
+            saveAs(blob, 'archivo_historial_asignaciones.xlsx');
+        } catch (error) {
+            console.error('Error downloading Excel file:', error);
+        }
+    };
+
     const formatDate = (date) => {
         if (!date) return 'N/A';
         const d = new Date(date);
@@ -29,6 +39,7 @@ const HistorialTable = () => {
         <div>
             <h2>Historial de Asignaciones</h2>
             <button onClick={downloadExcel}>Descargar Excel</button>
+            <button onClick={downloadArchivoExcel}>Descargar Archivo Excel</button>
             <table>
                 <thead>
                     <tr>
