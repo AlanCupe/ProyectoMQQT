@@ -35,10 +35,25 @@ exports.getUnassignedPeopleAndBeacons = async (req, res) => {
         `;
         
         const unassignedBeaconsQuery = `
-            SELECT b.iBeaconID, b.MacAddress
-            FROM iBeacon b
-            LEFT JOIN AsignacionPersonasBeacons apb ON b.iBeaconID = apb.iBeaconID
-            WHERE apb.iBeaconID IS NULL
+            WITH UniqueBeacons AS (
+                SELECT 
+                    b.iBeaconID,
+                    b.MacAddress,
+                    ROW_NUMBER() OVER (PARTITION BY b.MacAddress ORDER BY b.iBeaconID) AS RowNum
+                FROM 
+                    iBeacon b
+                LEFT JOIN 
+                    AsignacionPersonasBeacons apb ON b.iBeaconID = apb.iBeaconID
+                WHERE 
+                    apb.iBeaconID IS NULL
+            )
+            SELECT 
+                iBeaconID,
+                MacAddress
+            FROM 
+                UniqueBeacons
+            WHERE 
+                RowNum = 1;
         `;
         
         const [unassignedPeopleResult, unassignedBeaconsResult] = await Promise.all([
@@ -55,6 +70,8 @@ exports.getUnassignedPeopleAndBeacons = async (req, res) => {
         res.status(500).send('Error al obtener personas y beacons no asignados');
     }
 };
+
+
 
 exports.createAssignBeacon = async (req, res) => {
     const { PersonaID, iBeaconID, Timestamp } = req.body;
