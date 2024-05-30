@@ -43,6 +43,23 @@ const AssignBeaconForm = memo(() => {
             Swal.fire('Error', 'Persona o Beacon no seleccionado.', 'error');
             return;
         }
+
+        // Verificar si el beacon ya está asignado
+        const beaconAlreadyAssigned = assignments.some(assignment => assignment.iBeaconID === selectedBeacon.value);
+        if (beaconAlreadyAssigned) {
+            Swal.fire('Error', 'El beacon ya está asignado.', 'error');
+            return;
+        }
+
+        // Verificar si el MacAddress del beacon ya está asignado
+        const macAddressAlreadyAssigned = assignments.some(assignment => {
+            const beacon = beacons.find(b => b.iBeaconID === selectedBeacon.value);
+            return assignment.BeaconMac === beacon.MacAddress;
+        });
+        if (macAddressAlreadyAssigned) {
+            Swal.fire('Error', 'El beacon con esta dirección MAC ya está asignado.', 'error');
+            return;
+        }
     
         const persona = people.find(p => p.PersonaID === selectedPerson.value);
         const beacon = beacons.find(b => b.iBeaconID === selectedBeacon.value);
@@ -65,6 +82,7 @@ const AssignBeaconForm = memo(() => {
             if (response.ok) {
                 const newAssignment = await response.json();
             
+    
                 // Verificar si la respuesta contiene el ID de la asignación
                 if (!newAssignment.AsignacionID) {
                     throw new Error('AsignacionID no está presente en la respuesta');
@@ -94,12 +112,18 @@ const AssignBeaconForm = memo(() => {
         setLoading(false);
     };
 
+    // Filtrar beacons para eliminar duplicados por MacAddress y excluir los ya asignados
+    const uniqueBeacons = beacons.filter((beacon, index, self) =>
+        index === self.findIndex((b) => b.MacAddress === beacon.MacAddress) &&
+        !assignments.some(assignment => assignment.BeaconMac === beacon.MacAddress)
+    );
+
     const personOptions = people.map(person => ({
         value: person.PersonaID,
         label: `${person.Nombre} ${person.Apellido}`
     }));
 
-    const beaconOptions = beacons.map(beacon => ({
+    const beaconOptions = uniqueBeacons.map(beacon => ({
         value: beacon.iBeaconID,
         label: beacon.MacAddress
     }));
