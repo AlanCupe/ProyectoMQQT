@@ -134,9 +134,9 @@ const AssignBeaconTable = memo(() => {
     return (
         <div>
             <h2 className='tituloTabla'>ASIGNACIONES</h2>
-            <div>
-                <button className='btn-filter' onClick={() => setModalIsOpen(true)}>Filtrar y Descargar</button>
-                <button className='btn-delete-all' onClick={handleDeleteAll}>Eliminar Todas las Asignaciones</button>
+            <div className='filters'>
+                <button className='btn-filter flex' onClick={() => setModalIsOpen(true)}><img src='/img/filtrar.png' width={"10px"}/>Filtrar y Descargar</button>
+                <button className='btnDelete' onClick={handleDeleteAll}>❌ Eliminar Todas las Asignaciones</button>
             </div>
             <table className='tabla'>
                 <thead>

@@ -36,7 +36,7 @@ export const AreaForm_CreateGateway = () => {
 
     return (
         <div>
-            <h2>REGISTRAR GATEWAY</h2>
+            <h2 className='tituloTabla'>REGISTRAR GATEWAY</h2>
             <form className='form-employe' onSubmit={handleSubmit}>
                 <input 
                     type="text" 
@@ -47,6 +47,7 @@ export const AreaForm_CreateGateway = () => {
                     onChange={handleChange} 
                 />
                 <input 
+                    className='datetime-local'
                     type="datetime-local" 
                     name="Timestamp" 
                     placeholder='Timestamp' 

@@ -18,7 +18,7 @@ export const PanelControl = memo(() => {
               to={"/panelcontrol/registrousers"}
               className={({ isActive }) => (isActive ? "active" : "inactive")}
             >
-              <img src="/img/usuarioCreate.png"/><span>Registrar Personal</span>
+              <img src="/img/usuarioCreate.png"/><span>REGISTRAR PERSONAL</span>
             </NavLink>
           </li>
           <li>
@@ -26,7 +26,7 @@ export const PanelControl = memo(() => {
               to={"/panelcontrol/registroibecons"}
               className={({ isActive }) => (isActive ? "active" : "inactive")}
             >
-               <img src="/img/beacon.png"/><span> Registrar Beacon</span>
+               <img src="/img/beacon.png"/><span> REGISTRAR BEACON</span>
              
             </NavLink>
           </li>
@@ -35,7 +35,7 @@ export const PanelControl = memo(() => {
               to={"/panelcontrol/beaconasignation"}
               className={({ isActive }) => (isActive ? "active gold-border" : "inactive gold-border")}
             >
-              <img src="/img/asignaciones.png"/><span> Asignación de Beacon</span>
+              <img src="/img/asignaciones.png"/><span> ASIGNACION DE BEACON</span>
              
             </NavLink>
           </li>
@@ -44,7 +44,7 @@ export const PanelControl = memo(() => {
               to={"/panelcontrol/arearegister"}
               className={({ isActive }) => (isActive ? "active" : "inactive")}
             >
-               <img src="/img/gateway.png"/><span>  Registrar Area | Gateway</span>
+               <img src="/img/gateway.png"/><span> REGISTRAR AREA || ✍️ GATEWAY</span>
              
             </NavLink>
           </li>
@@ -53,7 +53,7 @@ export const PanelControl = memo(() => {
               to={"/panelcontrol/areaasignation"}
               className={({ isActive }) => (isActive ? "active gold-border" : "inactive gold-border")}
             >
-               <img src="/img/area.png"/><span>Asignación de Area de Trabajo</span>
+               <img src="/img/area.png"/><span>ASIGNACION DE AREA DE TRABAJO</span>
               
             </NavLink>
           </li>

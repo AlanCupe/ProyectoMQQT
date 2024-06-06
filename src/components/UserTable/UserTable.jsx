@@ -250,8 +250,8 @@ const UsersTable = memo(() => {
                 <h2 className="tituloTabla">PERSONAL REGISTRADO</h2>
             </div>
             <div className="filters">
-                <button className='btn-filter' onClick={fetchReportData}>Filtrar y Descargar</button>
-                <button className='btn-delete-all' onClick={handleDeleteAll}>Eliminar Todo</button>
+                <button className='btn-filter flex' onClick={fetchReportData}><img src='/img/filtrar.png' alt='filtro' width={"10px"}/> Filtrar y Descargar</button>
+                <button className='btnDelete' onClick={handleDeleteAll}>❌ Eliminar Todo</button>
             </div>
             <table className="tabla">
                 <thead>

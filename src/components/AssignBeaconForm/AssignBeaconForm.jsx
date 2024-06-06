@@ -130,7 +130,7 @@ const AssignBeaconForm = memo(() => {
 
     return (
         <form onSubmit={handleSubmit} className='form-AsignacionBeacons'>
-            <h2>ASIGNAR BEACON A PERSONAL</h2>
+            <h2 className='tituloTabla'>ASIGNAR BEACON A PERSONAL</h2>
             {error && <p className="error">{error}</p>}
             {loading ? <p>Loading...</p> : (
                 <>

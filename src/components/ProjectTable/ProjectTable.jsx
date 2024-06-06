@@ -14,21 +14,23 @@ const ProjectTable = memo(({ data }) => {
         <table className='project-table'>
             <thead>
                 <tr>
-                    <th>Beacon</th>
-                    <th>Tipo de Evento</th>
+                    <th>NOMBRES Y APELLIDOS</th>
+                    <th>BEACON</th>
+                    <th>TIPO DE EVENTO</th>
                     <th>RSSI</th>
-                    <th>Timestamp</th>
-                    <th>Nombre y Apellido</th>
+                    <th>FECHA Y HORA</th>
+                   
                 </tr>
             </thead>
             <tbody>
                 {data.map(evento => (
                     <tr key={evento.iBeaconID}>
+                          <td>{evento.PersonaNombreApellido ? `${evento.PersonaNombreApellido}` : "No asignado"}</td>
                         <td>{evento.BeaconMacAddress}</td>
-                        <td>{evento.TipoEvento}</td>
+                        <td>{evento.TipoEvento =="Entrada"?<img className='inputIcon' src='img/input.png'/> : <img className='outputIcon' src='img/output.png'/>}</td>
                         <td>{evento.Rssi}</td>
                         <td>{new Date(evento.Timestamp).toLocaleString()}</td>
-                        <td>{evento.PersonaNombreApellido ? `${evento.PersonaNombreApellido}` : "No asignado"}</td>
+                      
                     </tr>
                 ))}
             </tbody>

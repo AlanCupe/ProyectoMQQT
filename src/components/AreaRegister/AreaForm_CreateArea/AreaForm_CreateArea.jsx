@@ -26,7 +26,7 @@ const AreaForm_CreateArea = memo(() => {
 
     return (
         <div>
-            <h2>REGISTRAR AREA</h2>
+            <h2 className='tituloTabla'>REGISTRAR AREA</h2>
             <form className="form-employe" onSubmit={handleSubmit}>
              
              <input

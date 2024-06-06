@@ -77,7 +77,7 @@ export const BeaconsForm = () => {
 
     return (
         <form onSubmit={handleSubmit} className='form-beacon'>
-            <h2 className='titleRegister'>REGISTRAR NUEVO BEACON</h2>
+            <h2 className='tituloTabla'>REGISTRAR NUEVO BEACON</h2>
             <div className="form-input">
                 <input type="text" name="MacAddress" value={formData.MacAddress} onChange={handleChange} required placeholder='MAC Address' />
                 <button type="submit">Crear Beacon</button>

@@ -17,18 +17,16 @@ const Sidebar = ({ isOpen, toggle }) => {
                 <span className="icon"><img src='/img/dashboardIcon.png'/></span>
                 <span className="title">Dashboard</span>
             </NavLink>
-            <NavLink to={'/historial'} className={({ isActive }) => isActive ? "menu-item active" : "menu-item"}>
-                <span className="icon"><img src='/img/historialIcon.png'/></span>
-                <span className="title">Historial</span>
-            </NavLink>
+           
             <NavLink to={'/panelcontrol/'} className={({ isActive }) => isActive ? "menu-item active" : "menu-item"}>
                 <span className="icon"><img src='/img/controlPanel.png'/></span>
                 <span className="title">Control Panel</span>
             </NavLink>
-            <NavLink to={'/beaconAsignation'} className={({ isActive }) => isActive ? "menu-item active" : "menu-item"}>
-                <span className="icon">&#9881;</span>
-                <span className="title">Log Out</span>
+            <NavLink to={'/historial'} className={({ isActive }) => isActive ? "menu-item active" : "menu-item"}>
+                <span className="icon"><img src='/img/historialIcon.png'/></span>
+                <span className="title">Historial</span>
             </NavLink>
+         
         </div>
     );
 };

@@ -118,17 +118,24 @@ export const Dashboard = memo(() => {
     };
 
     if (loading) {
-        return <div className='grid'>Cargando...</div>;
+        return (
+            <div className='grid'>
+                <div className="spinner"></div>
+                Cargando...
+            </div>
+        );
     }
 
     return (
         <>
+            <div className='containerBtn'>
             <button onClick={() => setFilterEnabled(!filterEnabled)} className='filtrobutton'>
-                {filterEnabled ? 'Mostrar Todos' : 'Aplicar Filtro'}
+                {filterEnabled ? 'Mostrar Todos' : <div className='flex'><span>Aplicar Filtro</span> <img className='buttonIcon' src="img/filtrar.png" alt="filtro-Icon" /></div>}
             </button>
             <button onClick={handleDownloadExcel} className='downloadbutton'>
-                Descargar Eventos en Excel
+                Descargar Eventos <img src="img/excel.png" alt="" />
             </button>
+            </div>
             <div className='grid'>
                 {areas.filter(gateway => !filterEnabled || gateway.isOnline).map(gateway => {
                     const gatewayEvents = filteredData.filter(evento => evento.GatewayID === gateway.GatewayID);
@@ -139,21 +146,19 @@ export const Dashboard = memo(() => {
                                 <div className='containerImgTable'></div>
                                 <h2 className='flexRow containerData'>
                                     <img className='imgRouter' src="/img/gateway.png" alt="gateway" />
-                                    <span>{gateway.MacAddress}</span>
+                                    <span>{gateway.areaNombre.toUpperCase()}</span>
                                     <span>{gateway.isOnline ? <div className='containerLet'><div className='letEnable'></div></div> : <div className='containerLet'><div className='letDisable'></div></div>}</span>
                                 </h2>
-                                <h3>{gateway.areaNombre}</h3>
+                                <h3>{gateway.MacAddress.toUpperCase()}</h3>
                                 <p className='flexRow imgP'>
                                     <img src="/img/user.png" alt="usuarioDetectados" />
-                                    <span>Total Eventos: {gatewayEvents.length}</span>
+                                    <span>Total : {gatewayEvents.length}</span>
                                 </p>
-                                <p className='flexRow imgP'>
+                                {/* <p className='flexRow imgP'>
                                     <img src="/img/user.png" alt="usuarioDetectados" />
                                     <span>Personal: {totalEntradaEvents}</span>
-                                </p>
-                                <p className='flexRow imgP'>
-                                    <span>{gateway.isOnline ? 'Encendido' : 'Apagado'}</span>
-                                </p>
+                                </p> */}
+                              
                             </div>
                             <div className='table-container'>
                                 {gatewayEvents.length > 0 ? (

@@ -15,10 +15,10 @@
         align-items: center;
         justify-content: center;
         padding: 15px;
-        background-color: #0E3062;
-        border: 1px solid #e0e0e0;
+        background-image: url('/img/shiny.svg');
+     
         border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        box-shadow: 0px 0px 8px rgb(0, 0, 0);
         margin: 0px 0px 10px 0px;
         text-align: center;
         font-family: "HindVadodara-Bold";
@@ -28,14 +28,19 @@
         margin: 0;
         font-size: 16px;
         color:white;
-        
+        width: 100%;
+        letter-spacing: 2px;
         
     }
     
     .containerInfoTable h3 {
         margin: 10px 0;
         font-size: 16px;
-        color:white
+        color:white;
+       
+        font-style: italic;
+        letter-spacing: 3px;
+
     }
     
     .containerInfoTable p {
@@ -52,7 +57,7 @@
     .flexRow{
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: space-around;
         align-items: center;
         gap: 8px;
         
@@ -73,7 +78,7 @@
    .containerLet{
         border-radius: 40px;
         border: 4px solid rgb(63, 62, 62);
-       
+        
         .letEnable, .letDisable{
             padding: 10px;
             border-radius: 40px;
@@ -81,8 +86,8 @@
         }
         .letEnable{
             background-color: rgb(2, 245, 42);
-          
-            animation: moveRight 300ms infinite alternate;
+            
+            animation: moveRight 600ms infinite alternate;
             position: relative;
         }
         .letDisable{
@@ -92,15 +97,26 @@
 
     @keyframes moveRight {
         0% {
-            opacity: 0.1;
+            opacity: 0.5;
         }
         100% {
             opacity: 1;
         }
     }
 .filtrobutton{
-    width: 150px;
-    height: 50px;
+   
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 10px;
+    color: rgb(1, 74, 92);
+    background-color:#fffffff6;
+    font-family: "HindVadodara-Bold";
+    font-size: 1rem;
+    border: 2px solid rgb(0, 105, 167);
+    transition: all 300ms;
+}
+.filtrobutton:hover{
+    box-shadow: 0px 0px 5px rgb(0, 102, 255);
 }
 .conteinerGateways{
     /*background-color: greenyellow;*/
@@ -109,3 +125,59 @@
     width: auto;
     font-size: 15px;
 }
+.flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    column-gap: 10px;
+    img{
+        width: 25px;
+    }
+}
+.downloadbutton{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0px 10px;
+    background-color: #fffffff6;
+    color: rgb(1, 74, 92);
+    column-gap: 10px;
+    font-family: "HindVadodara-Bold";
+    font-size: 1rem;
+    border: 2px solid rgb(0, 105, 167);
+    transition: all 300ms;
+    img{
+        width: 25px;
+    }
+}
+.downloadbutton:hover{
+    box-shadow: 0px 0px 5px rgb(0, 102, 255);
+}
+.containerBtn{
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 15px;
+    padding-right: 15px;
+    column-gap: 10px;
+    
+.filtrobutton:hover{
+
+}
+}
+
+.spinner {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+
+
