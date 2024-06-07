@@ -8,7 +8,8 @@ loadEnv();
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: process.env.VITE_HOST || 'localhost',
-    port: parseInt(process.env.VITE_PORT) || 5173,
+    host: '0.0.0.0'||process.env.VITE_HOST || 'localhost',
+    port:  5173 || parseInt(process.env.VITE_PORT) ,
   },
 });
+

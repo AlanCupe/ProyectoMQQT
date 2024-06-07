@@ -165,9 +165,7 @@
     padding-right: 15px;
     column-gap: 10px;
     
-.filtrobutton:hover{
 
-}
 }
 
 .spinner {
@@ -180,4 +178,9 @@
 }
 
 
-
+.chartsContainer{
+    display: flex;
+    flex-direction: row;
+    padding-top: 40px;
+    padding-left:20px ;
+}

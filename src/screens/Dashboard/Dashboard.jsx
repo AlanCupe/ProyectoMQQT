@@ -3,6 +3,10 @@ import { EventosBeaconsContext } from '../../Context/EventosBeaconsProvider';
 import { GatewayContext } from '../../Context/GatewayProvider';
 import { AreaAssigmentContext } from '../../Context/AreaAssigmentProvider';
 import ProjectTable from '../../components/ProjectTable/ProjectTable';
+import { ChartBarras } from '../../components/Charts/ChartBarras/ChartBarras';
+import { ChartBarrasPorArea } from '../../components/Charts/ChartBarrasPorArea/ChartBarrasPorArea';
+import EventCountCard from '../../components/EventCountCard/EventCountCard';
+
 import './Dashboard.css';
 
 export const Dashboard = memo(() => {
@@ -12,7 +16,23 @@ export const Dashboard = memo(() => {
     const [areas, setAreas] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [filterEnabled, setFilterEnabled] = useState(false);
+    const [chartData, setChartData] = useState([]);
+    const [chartDataPorArea, setChartDataPorArea] = useState([]);
 
+    useEffect(() => {
+        const dataPorArea = gateways.map(gateway => {
+            const areaNombre = getAreaNombre(gateway.MacAddress);
+            const eventosEnAreaEntrada = filteredData.filter(e => e.GatewayID === gateway.GatewayID && e.TipoEvento === 'Entrada').length;
+            const eventosEnAreaSalida = filteredData.filter(e => e.GatewayID === gateway.GatewayID && e.TipoEvento === 'Salida').length;
+            return {
+                area: areaNombre,
+                entrada: eventosEnAreaEntrada,
+                salida: eventosEnAreaSalida
+            };
+        });
+        setChartDataPorArea(dataPorArea);
+    }, [filteredData, gateways]);
+    
     useEffect(() => {
         fetchAssignments();
     }, [eventosBeacons, gateways]);
@@ -32,6 +52,15 @@ export const Dashboard = memo(() => {
             setFilteredData(eventosBeacons);
         }
     }, [filterEnabled, eventosBeacons, gateways]);
+
+    useEffect(() => {
+        // Suponiendo que quieres contar eventos por tipo
+        const data = [
+            { category: 'Entrada', value: filteredData.filter(e => e.TipoEvento === 'Entrada').length },
+            { category: 'Salida', value: filteredData.filter(e => e.TipoEvento === 'Salida').length }
+        ];
+        setChartData(data);
+    }, [filteredData]);
 
     const updateAreas = () => {
         const updatedAreas = gateways.map(gateway => {
@@ -127,7 +156,22 @@ export const Dashboard = memo(() => {
     }
 
     return (
-        <>
+        <>  
+        <div className='chartsContainer'>
+        <ChartBarras data={chartData}/>
+
+        <div className='countsContainer'>
+        <EventCountCard count={filteredData.length} />
+        </div>
+       
+
+           
+        </div>
+            
+            <div className='chart-container'>
+    <h2>Eventos por Área</h2>
+    <ChartBarrasPorArea data={chartDataPorArea} />
+</div>
             <div className='containerBtn'>
             <button onClick={() => setFilterEnabled(!filterEnabled)} className='filtrobutton'>
                 {filterEnabled ? 'Mostrar Todos' : <div className='flex'><span>Aplicar Filtro</span> <img className='buttonIcon' src="img/filtrar.png" alt="filtro-Icon" /></div>}
@@ -191,3 +235,4 @@ export const Dashboard = memo(() => {
         </>
     );
 });
+

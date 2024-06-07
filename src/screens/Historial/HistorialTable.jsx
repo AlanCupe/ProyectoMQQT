@@ -51,7 +51,7 @@ const HistorialTable = () => {
 
     return (
         <div className='historial'>
-            <h1 className='tituloTabla'>Historial de Asignaciones</h1>
+            <h1 className='tituloTabla'>HISTORIAL DE ASIGNACIONES</h1>
            <div className='containerBtnHistorial'>
            <button className='flex  btnHistorial' onClick={() => downloadExcel('daily')}>Reporte Diario <img src='img/excel.png' alt='ExcelIcon' width={'20px'}/></button>
             <button className='flex btnHistorial' onClick={() => downloadExcel('monthly')}>Reporte General  <img src='img/excel.png' alt='ExcelIcon' width={'20px'}/></button>
