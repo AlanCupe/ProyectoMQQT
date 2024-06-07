@@ -3,6 +3,10 @@ import { EventosBeaconsContext } from '../../Context/EventosBeaconsProvider';
 import { GatewayContext } from '../../Context/GatewayProvider';
 import { AreaAssigmentContext } from '../../Context/AreaAssigmentProvider';
 import ProjectTable from '../../components/ProjectTable/ProjectTable';
+import { ChartBarras } from '../../components/Charts/ChartBarras/ChartBarras';
+import { ChartBarrasPorArea } from '../../components/Charts/ChartBarrasPorArea/ChartBarrasPorArea';
+import EventCountCard from '../../components/EventCountCard/EventCountCard';
+
 import './Dashboard.css';
 
 export const Dashboard = memo(() => {
@@ -12,7 +16,23 @@ export const Dashboard = memo(() => {
     const [areas, setAreas] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [filterEnabled, setFilterEnabled] = useState(false);
+    const [chartData, setChartData] = useState([]);
+    const [chartDataPorArea, setChartDataPorArea] = useState([]);
 
+    useEffect(() => {
+        const dataPorArea = gateways.map(gateway => {
+            const areaNombre = getAreaNombre(gateway.MacAddress);
+            const eventosEnAreaEntrada = filteredData.filter(e => e.GatewayID === gateway.GatewayID && e.TipoEvento === 'Entrada').length;
+            const eventosEnAreaSalida = filteredData.filter(e => e.GatewayID === gateway.GatewayID && e.TipoEvento === 'Salida').length;
+            return {
+                area: areaNombre,
+                entrada: eventosEnAreaEntrada,
+                salida: eventosEnAreaSalida
+            };
+        });
+        setChartDataPorArea(dataPorArea);
+    }, [filteredData, gateways]);
+    
     useEffect(() => {
         fetchAssignments();
     }, [eventosBeacons, gateways]);
@@ -32,6 +52,15 @@ export const Dashboard = memo(() => {
             setFilteredData(eventosBeacons);
         }
     }, [filterEnabled, eventosBeacons, gateways]);
+
+    useEffect(() => {
+        // Suponiendo que quieres contar eventos por tipo
+        const data = [
+            { category: 'Entrada', value: filteredData.filter(e => e.TipoEvento === 'Entrada').length },
+            { category: 'Salida', value: filteredData.filter(e => e.TipoEvento === 'Salida').length }
+        ];
+        setChartData(data);
+    }, [filteredData]);
 
     const updateAreas = () => {
         const updatedAreas = gateways.map(gateway => {
@@ -118,17 +147,39 @@ export const Dashboard = memo(() => {
     };
 
     if (loading) {
-        return <div className='grid'>Cargando...</div>;
+        return (
+            <div className='grid'>
+                <div className="spinner"></div>
+                Cargando...
+            </div>
+        );
     }
 
     return (
-        <>
+        <>  
+        <div className='chartsContainer'>
+        <ChartBarras data={chartData}/>
+
+        <div className='countsContainer'>
+        <EventCountCard count={filteredData.length} />
+        </div>
+       
+
+           
+        </div>
+            
+            <div className='chart-container'>
+    <h2>Eventos por Área</h2>
+    <ChartBarrasPorArea data={chartDataPorArea} />
+</div>
+            <div className='containerBtn'>
             <button onClick={() => setFilterEnabled(!filterEnabled)} className='filtrobutton'>
-                {filterEnabled ? 'Mostrar Todos' : 'Aplicar Filtro'}
+                {filterEnabled ? 'Mostrar Todos' : <div className='flex'><span>Aplicar Filtro</span> <img className='buttonIcon' src="img/filtrar.png" alt="filtro-Icon" /></div>}
             </button>
             <button onClick={handleDownloadExcel} className='downloadbutton'>
-                Descargar Eventos en Excel
+                Descargar Eventos <img src="img/excel.png" alt="" />
             </button>
+            </div>
             <div className='grid'>
                 {areas.filter(gateway => !filterEnabled || gateway.isOnline).map(gateway => {
                     const gatewayEvents = filteredData.filter(evento => evento.GatewayID === gateway.GatewayID);
@@ -139,21 +190,19 @@ export const Dashboard = memo(() => {
                                 <div className='containerImgTable'></div>
                                 <h2 className='flexRow containerData'>
                                     <img className='imgRouter' src="/img/gateway.png" alt="gateway" />
-                                    <span>{gateway.MacAddress}</span>
+                                    <span>{gateway.areaNombre.toUpperCase()}</span>
                                     <span>{gateway.isOnline ? <div className='containerLet'><div className='letEnable'></div></div> : <div className='containerLet'><div className='letDisable'></div></div>}</span>
                                 </h2>
-                                <h3>{gateway.areaNombre}</h3>
+                                <h3>{gateway.MacAddress.toUpperCase()}</h3>
                                 <p className='flexRow imgP'>
                                     <img src="/img/user.png" alt="usuarioDetectados" />
-                                    <span>Total Eventos: {gatewayEvents.length}</span>
+                                    <span>Total : {gatewayEvents.length}</span>
                                 </p>
-                                <p className='flexRow imgP'>
+                                {/* <p className='flexRow imgP'>
                                     <img src="/img/user.png" alt="usuarioDetectados" />
                                     <span>Personal: {totalEntradaEvents}</span>
-                                </p>
-                                <p className='flexRow imgP'>
-                                    <span>{gateway.isOnline ? 'Encendido' : 'Apagado'}</span>
-                                </p>
+                                </p> */}
+                              
                             </div>
                             <div className='table-container'>
                                 {gatewayEvents.length > 0 ? (
@@ -186,3 +235,4 @@ export const Dashboard = memo(() => {
         </>
     );
 });
+

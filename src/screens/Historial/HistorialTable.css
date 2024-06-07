@@ -14,3 +14,30 @@
 .pagination span {
     margin: 0 10px;
 }
+.historial{
+    padding: 20px;
+    padding-top: 30px;
+}
+
+.btnHistorial{
+
+ 
+    border: 2px solid green;
+    font-family: "HindVadodara-Bold";
+    font-size: 1rem ;
+    color: rgb(1, 74, 92);
+    
+    padding: 5px;
+    border-radius: 4px;
+}
+.btnHistorial:hover{
+    box-shadow: 0px 0px 5px rgb(0, 202, 125);
+
+}
+.containerBtnHistorial{
+    display: flex;
+    gap: 20px;
+    justify-content: flex-end;
+    padding-bottom: 20px;
+    padding-right: 5px;
+}

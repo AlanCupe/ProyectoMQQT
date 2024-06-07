@@ -50,10 +50,12 @@ const HistorialTable = () => {
     if (error) return <p>Error loading historial: {error}</p>;
 
     return (
-        <div>
-            <h1>Historial de Asignaciones</h1>
-            <button onClick={() => downloadExcel('daily')}>Reporte Diario</button>
-            <button onClick={() => downloadExcel('monthly')}>Reporte General</button>
+        <div className='historial'>
+            <h1 className='tituloTabla'>HISTORIAL DE ASIGNACIONES</h1>
+           <div className='containerBtnHistorial'>
+           <button className='flex  btnHistorial' onClick={() => downloadExcel('daily')}>Reporte Diario <img src='img/excel.png' alt='ExcelIcon' width={'20px'}/></button>
+            <button className='flex btnHistorial' onClick={() => downloadExcel('monthly')}>Reporte General  <img src='img/excel.png' alt='ExcelIcon' width={'20px'}/></button>
+           </div>
             <table>
                 <thead>
                     <tr>

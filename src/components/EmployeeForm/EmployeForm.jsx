@@ -95,7 +95,7 @@ const EmployeeForm =memo( () => {
     };
     return (
         <div className='form-container'>
-            <div className='titleRegister'><h2>REGISTRAR PERSONAL</h2></div>
+            <div className='titleRegister'><h2 className='tituloTabla'>REGISTRAR PERSONAL</h2></div>
             <form onSubmit={handleSubmit}>
                 <div className='form-employe'>
                     <input type="text" id="Nombre" name="Nombre" placeholder="Nombre" value={formData.Nombre} onChange={handleChange} />
@@ -105,7 +105,7 @@ const EmployeeForm =memo( () => {
                     <input type="text" id="Empresa" name="Empresa" placeholder="Empresa" value={formData.Empresa} onChange={handleChange} />
                     {error && <p className="error">{error}</p>}
                     <div className="button-container">
-                        <button type="submit">Create</button>
+                        <button type="submit">Crear</button>
                     </div>
                 </div>
             </form>

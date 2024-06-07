@@ -6,7 +6,10 @@ const PORT = process.env.PORT || 3000;
 
 
 app.use(cors());
+
+
 app.use(express.json());
+
 
 const mqttRoutes = require('./src/routes/mqttRoutes');
 const personRoutes = require('./src/routes/personRoutes');
@@ -39,6 +42,6 @@ app.use('/eventosbeacons', eventosBeaconsRoutes);
 app.use('/report', reportsGeneralRoutes); // Nueva ruta para reportes
 app.use('/historial', historialRoutes);
 
-app.listen(PORT, () => {
+app.listen(PORT,'0.0.0.0', () => {
     console.log(`Servidor escuchando en el puerto http://localhost:${PORT}`);
 });
