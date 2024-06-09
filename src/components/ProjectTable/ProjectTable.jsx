@@ -23,8 +23,8 @@ const ProjectTable = memo(({ data }) => {
                 </tr>
             </thead>
             <tbody>
-                {data.map(evento => (
-                    <tr key={evento.iBeaconID}>
+                {data.map((evento, indice) => (
+                    <tr key={`${evento.iBeaconID} ${indice}`}>
                           <td>{evento.PersonaNombreApellido ? `${evento.PersonaNombreApellido}` : "No asignado"}</td>
                         <td>{evento.BeaconMacAddress}</td>
                         <td>{evento.TipoEvento =="Entrada"?<img className='inputIcon' src='img/input.png'/> : <img className='outputIcon' src='img/output.png'/>}</td>

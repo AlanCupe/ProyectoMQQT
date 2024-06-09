@@ -20,7 +20,7 @@ export const EventosBeaconsProvider = ({ children }) => {
 
     useEffect(() => {
         fetchEventosBeacons();
-        const interval = setInterval(fetchEventosBeacons, 5000); // Actualiza cada 5 segundos
+        const interval = setInterval(fetchEventosBeacons, 500); // Actualiza cada 5 segundos
 
         return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonta
     }, []);
