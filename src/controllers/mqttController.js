@@ -2,7 +2,7 @@ const dbConnection = require('../config/dbconfig');
 const sql = require('mssql');
 
 const RSSI_THRESHOLD = -100;
-const CHECK_INTERVAL = 1000;
+const CHECK_INTERVAL = 2000;
 
 const handleMQTTMessage = async (req, res) => {
     const { topic, message } = req.body;

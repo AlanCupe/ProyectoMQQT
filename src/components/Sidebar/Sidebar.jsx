@@ -8,11 +8,7 @@ const Sidebar = ({ isOpen, toggle }) => {
             <button className="toggle-button" onClick={toggle}>
                 {isOpen ? <img className='img-icon' src='/img/arrow-left.png'/> : <img className='img-icon' src='/img/arrow-right.png'/>}
             </button>
-            {isOpen ? (
-                <input type="text" placeholder="Buscar" className="search-input"/>
-            ) : (
-                <div className="search-icon" onClick={toggle}>&#128269;</div>  // Icono de lupa Unicode // Icono de lupa Unicode
-            )}
+           
             <NavLink to={'/dashboard'} className={({ isActive }) => isActive ? "menu-item active" : "menu-item"}>
                 <span className="icon"><img src='/img/dashboardIcon.png'/></span>
                 <span className="title">Dashboard</span>

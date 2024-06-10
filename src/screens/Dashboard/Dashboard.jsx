@@ -158,19 +158,34 @@ export const Dashboard = memo(() => {
     return (
         <>  
         <div className='chartsContainer'>
-        <ChartBarras data={chartData}/>
-
+       
+    
+      
         <div className='countsContainer'>
-        <EventCountCard count={filteredData.length} />
+        <EventCountCard count={filteredData.length}  urlImg="/img/totalTrabajadores.png" description="Total de Eventos" className="firtsCountCard"/>
+            {chartDataPorArea.map((areaData,indice) => (
+                <EventCountCard
+                    key={`${areaData.area}${indice}`}
+                    count={areaData.entrada + areaData.salida}
+                    urlImg="/img/trabajadores.png"
+
+                    description={`Eventos en:`}
+                    area={areaData.area}
+                />
+            ))}
         </div>
+
+     
        
 
            
         </div>
             
-            <div className='chart-container'>
-    <h2>Eventos por Área</h2>
+            <div className='chartsContainer'>
+    <h2 className='tituloTabla'>Eventos por Área</h2>
     <ChartBarrasPorArea data={chartDataPorArea} />
+    {/**<ChartBarras data={chartData}/>**/}
+
 </div>
             <div className='containerBtn'>
             <button onClick={() => setFilterEnabled(!filterEnabled)} className='filtrobutton'>

@@ -1,18 +1,19 @@
 import React from 'react';
 import './EventCountCard.css';
 
-const EventCountCard = ({ count }) => {
+const EventCountCard = ({ count, urlImg, description,area }) => {
     return (
         <div className="event-count-card">
             <div className="iconContainer">
-                <img src="/img/event-icon.png" alt="event-icon" />
+                <img src={urlImg} alt="event-icon" />
             </div>
            <div className='countLabelContainer'>
            <div className="count">
              {count}
             </div>
             <div className="label">
-                Total de Eventos
+                {description} <br/>
+               <b>{area}</b> 
             </div>
            </div>
         </div>
