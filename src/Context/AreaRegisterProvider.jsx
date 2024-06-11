@@ -1,6 +1,7 @@
 // Context/AreaRegisterProvider.js
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const AreaRegisterContext = createContext();
 
@@ -12,22 +13,22 @@ export const AreaRegisterProvider = ({ children }) => {
   }, []);
 
   const fetchAreas = async () => {
-    const response = await axios.get('http://localhost:3000/arearegister');
+    const response = await axios.get(`/arearegister`);
     setAreas(response.data);
   };
 
   const createArea = async (nombre) => {
-    await axios.post('http://localhost:3000/arearegister', { nombre });
+    await axios.post(`/arearegister`, { nombre });
     fetchAreas();
   };
 
   const updateArea = async (id, nombre) => {
-    await axios.put(`http://localhost:3000/arearegister/${id}`, { nombre });
+    await axios.put(`/arearegister/${id}`, { nombre });
     fetchAreas();
   };
 
   const deleteArea = async (id) => {
-    await axios.delete(`http://localhost:3000/arearegister/${id}`);
+    await axios.delete(`/arearegister/${id}`);
     fetchAreas();
   };
 

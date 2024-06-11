@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import { AssignBeaconContext } from '../../Context/AssignBeaconProvider';
 import Modal from 'react-modal';
 import * as XLSX from 'xlsx';
+import { API_URL } from '../../config';
 import "./AssignBeaconTable.css";
 
 Modal.setAppElement('#root');
@@ -36,7 +37,7 @@ const AssignBeaconTable = memo(() => {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:3000/assignbeacon/${id}`, {
+                const response = await fetch(`/assignbeacon/${id}`, {
                     method: 'DELETE',
                 });
 
@@ -68,7 +69,7 @@ const AssignBeaconTable = memo(() => {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch('http://localhost:3000/assignbeacon', {
+                const response = await fetch(`/assignbeacon`, {
                     method: 'DELETE',
                 });
 

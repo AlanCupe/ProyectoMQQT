@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import * as XLSX from 'xlsx';
 import Swal from 'sweetalert2';
 import "./BeaconsTable.css";
+import { API_URL } from '../../config';
 
 Modal.setAppElement('#root'); // Asegúrate de que el id coincida con el id del elemento root en tu index.html
 
@@ -72,7 +73,7 @@ export const BeaconsTable = memo(() => {
 
         if (result.isConfirmed) {
             try {
-                const response = await fetch(`http://localhost:3000/beacons/${id}`, {
+                const response = await fetch(`/beacons/${id}`, {
                     method: 'DELETE',
                 });
 
@@ -94,7 +95,7 @@ export const BeaconsTable = memo(() => {
     };
 
     const handleSaveClick = async (id) => {
-        const response = await fetch(`http://localhost:3000/beacons/${id}`, {
+        const response = await fetch(`/beacons/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

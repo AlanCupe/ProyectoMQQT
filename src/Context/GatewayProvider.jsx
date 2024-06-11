@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const GatewayContext = createContext();
 
@@ -13,7 +14,7 @@ export const GatewayProvider = ({ children }) => {
 
     useEffect(() => {
         const fetchGateways = async () => {
-            const response = await axios.get('http://localhost:3000/gatewayregister');
+            const response = await axios.get(`/gatewayregister`);
             const gatewaysWithStatus = response.data.map(gateway => {
                 const isOnline = new Date() - new Date(gateway.LastHeartbeat) < 7000; // 10 seg
                 return { ...gateway, isOnline };
@@ -42,17 +43,17 @@ export const GatewayProvider = ({ children }) => {
     }, []);
 
     const fetchGateways = async () => {
-        const response = await axios.get('http://localhost:3000/gatewayregister');
+        const response = await axios.get(`/gatewayregister`);
         setGateways(response.data);
     };
 
     const fetchAreas = async () => {
-        const response = await axios.get('http://localhost:3000/areas');
+        const response = await axios.get(`/areas`);
         setAreas(response.data);
     };
 
     const createGateway = async (gatewayData) => {
-        await axios.post('http://localhost:3000/gatewayregister', gatewayData);
+        await axios.post(`/gatewayregister`, gatewayData);
         fetchGateways();
     };
 
@@ -73,7 +74,7 @@ export const GatewayProvider = ({ children }) => {
         // Formatear el timestamp como una cadena ISO
         const formattedTimestamp = timestamp.toISOString();
     
-        await axios.put(`http://localhost:3000/gatewayregister/${id}`, { GatewayID:id,MacAddress: macAddress, Timestamp: formattedTimestamp });
+        await axios.put(`/gatewayregister/${id}`, { GatewayID:id,MacAddress: macAddress, Timestamp: formattedTimestamp });
         console.log("Datos enviados:", { GatewayID:id,MacAddress: macAddress, Timestamp: formattedTimestamp });
         fetchGateways();
     };
@@ -81,12 +82,12 @@ export const GatewayProvider = ({ children }) => {
     
 
     const deleteGateway = async (id) => {
-        await axios.delete(`http://localhost:3000/gatewayregister/${id}`);
+        await axios.delete(`/gatewayregister/${id}`);
         fetchGateways();
     };
 
     const fetchAsignaciones = async () => {
-        const response = await axios.get('http://localhost:3000/asignaciongatewaysareas');
+        const response = await axios.get(`/asignaciongatewaysareas`);
         setAsignaciones(response.data);
     };
 

@@ -6,6 +6,7 @@ import ProjectTable from '../../components/ProjectTable/ProjectTable';
 import { ChartBarras } from '../../components/Charts/ChartBarras/ChartBarras';
 import { ChartBarrasPorArea } from '../../components/Charts/ChartBarrasPorArea/ChartBarrasPorArea';
 import EventCountCard from '../../components/EventCountCard/EventCountCard';
+import { API_URL } from '../../config';
 
 import './Dashboard.css';
 
@@ -127,7 +128,7 @@ export const Dashboard = memo(() => {
 
     const handleDownloadExcel = async () => {
         try {
-            const response = await fetch('http://localhost:3000/historial/eventosexcel', {
+            const response = await fetch(`/historial/eventosexcel`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

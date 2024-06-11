@@ -17,7 +17,7 @@ function App() {
 
   useEffect(() => {
     // Hacer una solicitud HTTP para obtener la lista de personas
-    fetch('http://localhost:3000/personas')
+    fetch('/personas')
       .then(response => {
         if (!response.ok) {
           throw new Error('Error al obtener la lista de personas');
@@ -33,7 +33,7 @@ function App() {
       });
 
     // Hacer una solicitud HTTP para obtener la lista de registros de presencia
-    fetch('http://localhost:3000/registros')
+    fetch('/registros')
       .then(response => {
         if (!response.ok) {
           throw new Error('Error al obtener la lista de registros');

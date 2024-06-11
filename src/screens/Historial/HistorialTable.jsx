@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { HistorialContext } from '../../Context/HistorialProvider';
 import './HistorialTable.css';
 import { saveAs } from 'file-saver';
+import { API_URL } from '../../config';
 
 const HistorialTable = () => {
     const { historial, loading, error, page, pageSize, total, setPage } = useContext(HistorialContext);
@@ -10,10 +11,10 @@ const HistorialTable = () => {
         let url;
         switch (type) {
             case 'daily':
-                url = 'http://localhost:3000/historial/excel';
+                url = `/historial/excel`;
                 break;
             case 'monthly':
-                url = 'http://localhost:3000/historial/archivoexcel';
+                url = `/historial/archivoexcel`;
                 break;
             default:
                 return;

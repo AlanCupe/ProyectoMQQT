@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from 'react';
 import mqtt from 'mqtt';
 import axios from 'axios';
 import { BeaconContext } from '../../Context/BeaconProvider';
+import { API_URL } from '../../config';
+
 
 export const Mqttdata = () => {
     const { addMqttData } = useContext(BeaconContext);
@@ -11,7 +13,7 @@ export const Mqttdata = () => {
     useEffect(() => {
         const fetchGateways = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/gatewayregister');
+                const response = await axios.get(`/gatewayregister`);
                 const macAddresses = response.data.map(gateway => gateway.MacAddress);
                 
                 console.log("tabla Gateway", macAddresses)
@@ -28,7 +30,7 @@ export const Mqttdata = () => {
     useEffect(() => {
         if (gatewayMacAddresses.length === 0) return;
 
-        const client = mqtt.connect('ws://localhost:9001');
+        const client = mqtt.connect('ws://192.168.18.34:9001');
         setMqttClient(client);
 
         client.on('connect', () => {
@@ -53,7 +55,7 @@ export const Mqttdata = () => {
 
     const saveDataToServer = async (topic, data) => {
         try {
-            const response = await fetch('http://localhost:3000/mqtt/message', {
+            const response = await fetch(`/mqtt/message`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

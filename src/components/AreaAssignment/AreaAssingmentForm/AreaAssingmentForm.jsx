@@ -3,6 +3,7 @@ import Select from 'react-select';
 import Modal from 'react-modal';
 import Swal from 'sweetalert2';
 import { AreaAssigmentContext } from "../../../Context/AreaAssigmentProvider";
+import { API_URL } from "../../../config";
 import "./AreaAssingmentForm.css";
 
 export const AreaAssingmentForm = () => {
@@ -58,7 +59,7 @@ export const AreaAssingmentForm = () => {
 
   const handleDownloadFilteredReport = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/area-assignments-report/download?macGateway=${filters.macGateway}&areaTrabajo=${filters.areaTrabajo}&fechaAsignacion=${filters.fechaAsignacion}`);
+      const response = await fetch(`/area-assignments-report/download?macGateway=${filters.macGateway}&areaTrabajo=${filters.areaTrabajo}&fechaAsignacion=${filters.fechaAsignacion}`);
       if (response.ok) {
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);

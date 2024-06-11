@@ -13,7 +13,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadURL('http://localhost:3000'); // Cambia esto a la URL de tu aplicación
+  mainWindow.loadURL('http://192.168.18.34:3000'); // Cambia esto a la URL de tu aplicación
 }
 
 app.whenReady().then(() => {

@@ -1,14 +1,27 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 
 
-app.use(cors());
+
+
+
+app.use(cors({
+    origin: '*', // Permitir solicitudes desde cualquier origen
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
+
+
+
 
 
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, 'dist')));
 
 
 const mqttRoutes = require('./src/routes/mqttRoutes');
@@ -27,6 +40,7 @@ const historialRoutes = require('./src/routes/historialRoutes');
 
 
 
+
 app.use('/mqtt', mqttRoutes);
 app.use('/personas', personRoutes);
 app.use('/beacons', beaconRoutes);
@@ -41,6 +55,10 @@ app.use('/eventosbeacons', eventosBeaconsRoutes);
 
 app.use('/report', reportsGeneralRoutes); // Nueva ruta para reportes
 app.use('/historial', historialRoutes);
+
+app.get('/dashboard', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 app.listen(PORT,'0.0.0.0', () => {
     console.log(`Servidor escuchando en el puerto http://localhost:${PORT}`);

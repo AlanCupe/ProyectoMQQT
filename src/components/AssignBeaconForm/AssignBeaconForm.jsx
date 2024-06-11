@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 import './AssignBeaconsForm.css';
 import { AssignBeaconContext } from '../../Context/AssignBeaconProvider';
 import Select from 'react-select';
+import { API_URL } from '../../config';
 
 const AssignBeaconForm = memo(() => {
     const { assignments, setAssignments } = useContext(AssignBeaconContext);
@@ -17,7 +18,7 @@ const AssignBeaconForm = memo(() => {
         setLoading(true);
         setError('');
         try {
-            const response = await fetch('http://localhost:3000/assignbeacon/unassigned');
+            const response = await fetch(`/assignbeacon/unassigned`);
             if (response.ok) {
                 const data = await response.json();
                 setPeople(data.people);
@@ -73,7 +74,7 @@ const AssignBeaconForm = memo(() => {
         setLoading(true);
         try {
             console.log('Sending data to server:', postData);
-            const response = await fetch('http://localhost:3000/assignbeacon', {
+            const response = await fetch(`/assignbeacon`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(postData)

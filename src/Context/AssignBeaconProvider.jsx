@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-
+import { API_URL } from '../config';
 export const AssignBeaconContext = createContext();
 
 const AssignBeaconProvider = ({ children }) => {
@@ -15,7 +15,7 @@ const AssignBeaconProvider = ({ children }) => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`http://localhost:3000/assignbeacon?page=${page}&pageSize=${pageSize}`);
+                const response = await fetch(`/assignbeacon?page=${page}&pageSize=${pageSize}`);
                 if (response.ok) {
                     const data = await response.json();
                     setAssignments(data.data);
