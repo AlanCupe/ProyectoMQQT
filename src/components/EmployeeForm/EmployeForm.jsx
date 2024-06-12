@@ -2,6 +2,7 @@ import React, { useState, useContext, memo } from 'react';
 import { UserContext } from '../../Context/UserProvider';
 import Swal from 'sweetalert2';
 import './EmployeForm.css'
+import { API_URL } from '../../config';
 
 const EmployeeForm =memo( () => {
     const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ const EmployeeForm =memo( () => {
             return;
         }
 
-        fetch('http://localhost:3000/personas', {
+        fetch(`/personas`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

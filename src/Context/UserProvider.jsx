@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { API_URL } from '../config';
 
 export const UserContext = createContext();
 
@@ -9,7 +10,7 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch('http://localhost:3000/personas?page=1&limit=50');
+                const response = await fetch(`/personas?page=1&limit=50`);
                 if (!response.ok) {
                     throw new Error('Error fetching users');
                 }
@@ -29,7 +30,7 @@ export const UserProvider = ({ children }) => {
 
     const fetchUsers = async (page, limit) => {
         try {
-            const response = await fetch(`http://localhost:3000/personas?page=${page}&limit=${limit}`);
+            const response = await fetch(`/personas?page=${page}&limit=${limit}`);
             if (!response.ok) {
                 throw new Error('Error fetching users');
             }

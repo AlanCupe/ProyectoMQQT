@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { API_URL } from '../config';
 
 export const HistorialContext = createContext();
 
@@ -15,7 +16,7 @@ const HistorialProvider = ({ children }) => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`http://localhost:3000/historial?page=${page}&pageSize=${pageSize}`);
+                const response = await fetch(`/historial?page=${page}&pageSize=${pageSize}`);
                 if (response.ok) {
                     const data = await response.json();
                     setHistorial(data.data);

@@ -1,7 +1,7 @@
 // AreaAssigmentProvider.jsx
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { API_URL } from '../config';
 export const AreaAssigmentContext = createContext();
 
 export const AreaAssigmentProvider = ({ children }) => {
@@ -16,34 +16,34 @@ export const AreaAssigmentProvider = ({ children }) => {
   }, []);
 
   const fetchAssignments = async () => {
-    const response = await axios.get('http://localhost:3000/asignaciongatewaysareas');
+    const response = await axios.get(`/asignaciongatewaysareas`);
     setAssignments(response.data);
   };
 
   const fetchAvailableGateways = async () => {
-    const response = await axios.get('http://localhost:3000/unassigned');
+    const response = await axios.get(`/unassigned`);
     setAvailableGateways(response.data);
   };
 
   const fetchAreas = async () => {
-    const response = await axios.get('http://localhost:3000/arearegister');
+    const response = await axios.get(`/arearegister`);
     setAreas(response.data);
   };
 
   const createAssignment = async (assignmentData) => {
-    await axios.post('http://localhost:3000/asignaciongatewaysareas', assignmentData);
+    await axios.post(`/asignaciongatewaysareas`, assignmentData);
     fetchAssignments();
     fetchAvailableGateways();
   };
 
   const updateAssignment = async (id, assignmentData) => {
-    await axios.put(`http://localhost:3000/asignaciongatewaysareas/${id}`, assignmentData);
+    await axios.put(`/asignaciongatewaysareas/${id}`, assignmentData);
     fetchAssignments();
     fetchAvailableGateways();
   };
 
   const deleteAssignment = async (id) => {
-    await axios.delete(`http://localhost:3000/asignaciongatewaysareas/${id}`);
+    await axios.delete(`/asignaciongatewaysareas/${id}`);
     fetchAssignments();
     fetchAvailableGateways();
   };

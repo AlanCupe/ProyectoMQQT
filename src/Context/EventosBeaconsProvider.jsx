@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import { API_URL } from '../config';
 
 export const EventosBeaconsContext = createContext();
 
@@ -8,7 +9,7 @@ export const EventosBeaconsProvider = ({ children }) => {
     
     const fetchEventosBeacons = async () => {
         try {
-            const response = await fetch('http://localhost:3000/eventosbeacons/eventos2');
+            const response = await fetch(`/eventosbeacons/eventos2`);
             const data = await response.json();
             setEventosBeacons(data);
             setLoading(false);
@@ -20,7 +21,7 @@ export const EventosBeaconsProvider = ({ children }) => {
 
     useEffect(() => {
         fetchEventosBeacons();
-        const interval = setInterval(fetchEventosBeacons, 5000); // Actualiza cada 5 segundos
+        const interval = setInterval(fetchEventosBeacons, 500); // Actualiza cada 5 segundos
 
         return () => clearInterval(interval); // Limpia el intervalo cuando el componente se desmonta
     }, []);

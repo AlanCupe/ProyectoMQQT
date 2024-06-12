@@ -4,7 +4,7 @@
         grid-auto-rows: auto;
         grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
         gap: 0px;
-        padding: 0px;
+        padding: 40px;
         /*background-color: aqua;*/
     
 }
@@ -162,7 +162,7 @@
     display: flex;
     justify-content: flex-end;
     padding-top: 15px;
-    padding-right: 15px;
+    padding-right: 55px;
     column-gap: 10px;
     
 
@@ -180,7 +180,17 @@
 
 .chartsContainer{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     padding-top: 40px;
-    padding-left:20px ;
+    padding-left:30px ;
+    padding-right: 30px;
+}
+.countsContainer{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+   
+    row-gap: 40px;
+    margin-bottom: 40px;
+    font-family: "HindVadodara-Light";
 }

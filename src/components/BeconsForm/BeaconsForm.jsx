@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { BeaconContext } from '../../Context/BeaconProvider';
 import "./BeaconsForm.css";
 import Swal from 'sweetalert2';
+import { API_URL } from '../../config';
 
 export const BeaconsForm = () => {
     const [formData, setFormData] = useState({
@@ -42,7 +43,7 @@ export const BeaconsForm = () => {
             return;
         }
     
-        fetch('http://localhost:3000/beacons', {
+        fetch(`/beacons`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)

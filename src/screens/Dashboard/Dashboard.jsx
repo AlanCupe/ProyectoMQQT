@@ -6,6 +6,7 @@ import ProjectTable from '../../components/ProjectTable/ProjectTable';
 import { ChartBarras } from '../../components/Charts/ChartBarras/ChartBarras';
 import { ChartBarrasPorArea } from '../../components/Charts/ChartBarrasPorArea/ChartBarrasPorArea';
 import EventCountCard from '../../components/EventCountCard/EventCountCard';
+import { API_URL } from '../../config';
 
 import './Dashboard.css';
 
@@ -127,7 +128,7 @@ export const Dashboard = memo(() => {
 
     const handleDownloadExcel = async () => {
         try {
-            const response = await fetch('http://localhost:3000/historial/eventosexcel', {
+            const response = await fetch(`/historial/eventosexcel`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -158,19 +159,34 @@ export const Dashboard = memo(() => {
     return (
         <>  
         <div className='chartsContainer'>
-        <ChartBarras data={chartData}/>
-
+       
+    
+      
         <div className='countsContainer'>
-        <EventCountCard count={filteredData.length} />
+        <EventCountCard count={filteredData.length}  urlImg="/img/totalTrabajadores.png" description="Total de Eventos" className="firtsCountCard"/>
+            {chartDataPorArea.map((areaData,indice) => (
+                <EventCountCard
+                    key={`${areaData.area}${indice}`}
+                    count={areaData.entrada + areaData.salida}
+                    urlImg="/img/trabajadores.png"
+
+                    description={`Eventos en:`}
+                    area={areaData.area}
+                />
+            ))}
         </div>
+
+     
        
 
            
         </div>
             
-            <div className='chart-container'>
-    <h2>Eventos por Área</h2>
+            <div className='chartsContainer'>
+    <h2 className='tituloTabla'>Eventos por Área</h2>
     <ChartBarrasPorArea data={chartDataPorArea} />
+    {/**<ChartBarras data={chartData}/>**/}
+
 </div>
             <div className='containerBtn'>
             <button onClick={() => setFilterEnabled(!filterEnabled)} className='filtrobutton'>

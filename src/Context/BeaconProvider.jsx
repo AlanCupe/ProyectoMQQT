@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-
+import { API_URL } from '../config';
 export const BeaconContext = createContext();
 
 export const BeaconProvider = ({ children }) => {
@@ -9,7 +9,7 @@ export const BeaconProvider = ({ children }) => {
     useEffect(() => {
         const fetchBeacons = async () => {
             try {
-                const response = await fetch('http://localhost:3000/beacons');
+                const response = await fetch(`/beacons`);
                 const data = await response.json();
                 // Eliminar duplicados por MacAddress
                 const uniqueBeacons = data.reduce((acc, beacon) => {
