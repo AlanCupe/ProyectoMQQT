@@ -47,7 +47,7 @@ export const ChartBarrasPorArea = ({ data }) => {
             },
             yaxis: {
                 title: {
-                    text: 'Cantidad de Eventos'
+                    text: 'Cantidad de Personas'
                 },
                 labels: {
                     formatter: function(val) {

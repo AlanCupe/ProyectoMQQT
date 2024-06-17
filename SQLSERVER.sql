@@ -1,7 +1,7 @@
 CREATE DATABASE MQTTSISTEMA;
 
 USE MQTTSISTEMA;
-USE master
+
 
 -- Primero, eliminamos las tablas si ya existen para evitar conflictos
 IF OBJECT_ID('dbo.historial_asignaciones', 'U') IS NOT NULL DROP TABLE dbo.historial_asignaciones;
@@ -21,12 +21,11 @@ CREATE TABLE Gateway (
     GatewayFree INT NULL,
     GatewayLoad FLOAT  NULL,
     Timestamp DATETIME NULL,
-	
+	LastHeartbeat DateTime NULL
 );
 
 
-ALTER TABLE Gateway
-ADD LastHeartbeat DateTime NULL;
+
 
 -- Tabla iBeacon
 CREATE TABLE iBeacon (

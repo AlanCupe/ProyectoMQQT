@@ -163,14 +163,14 @@ export const Dashboard = memo(() => {
     
       
         <div className='countsContainer'>
-        <EventCountCard count={filteredData.length}  urlImg="/img/totalTrabajadores.png" description="Total de Eventos" className="firtsCountCard"/>
+        <EventCountCard count={filteredData.length}  urlImg="/img/totalTrabajadores.png" description="Total de Personas" className="firtsCountCard"/>
             {chartDataPorArea.map((areaData,indice) => (
                 <EventCountCard
                     key={`${areaData.area}${indice}`}
                     count={areaData.entrada + areaData.salida}
                     urlImg="/img/trabajadores.png"
 
-                    description={`Eventos en:`}
+                    description={`Personas en:`}
                     area={areaData.area}
                 />
             ))}
@@ -183,7 +183,7 @@ export const Dashboard = memo(() => {
         </div>
             
             <div className='chartsContainer'>
-    <h2 className='tituloTabla'>Eventos por Área</h2>
+    <h2 className='tituloTabla'>Personas por Área</h2>
     <ChartBarrasPorArea data={chartDataPorArea} />
     {/**<ChartBarras data={chartData}/>**/}
 
