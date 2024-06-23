@@ -16,10 +16,11 @@ export const Dashboard = memo(() => {
     const { assignments, fetchAssignments } = useContext(AreaAssigmentContext);
     const [areas, setAreas] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
-    const [filterEnabled, setFilterEnabled] = useState(false);
+    const [filterEnabled, setFilterEnabled] = useState(true);
     const [chartData, setChartData] = useState([]);
     const [chartDataPorArea, setChartDataPorArea] = useState([]);
 
+  
     useEffect(() => {
         const dataPorArea = gateways.map(gateway => {
             const areaNombre = getAreaNombre(gateway.MacAddress);
@@ -39,9 +40,7 @@ export const Dashboard = memo(() => {
     }, [eventosBeacons, gateways]);
 
     useEffect(() => {
-        console.log("Eventos Beacons:", eventosBeacons);
-        console.log("Gateways:", gateways);
-        console.log("Asignaciones:", assignments);
+        
         updateAreas();
     }, [eventosBeacons, gateways, assignments]);
 
@@ -159,7 +158,7 @@ export const Dashboard = memo(() => {
     return (
         <>  
         <div className='chartsContainer'>
-       
+       <h1 className='tituloTabla'>SISTEMA DE CONTROL DE ACCESO DE LA U.M. TICLIO</h1>
     
       
         <div className='countsContainer'>

@@ -9,16 +9,20 @@ exports.getAssignBeacon = async (req, res) => {
     try {
         const pool = await dbConnection.connect();
         const query = `
-            SELECT 
-                AsignacionPersonasBeacons.AsignacionID,
-                Personas.Nombre + ' ' + Personas.Apellido AS PersonaName,
-                iBeacon.MacAddress AS BeaconMac,
-                AsignacionPersonasBeacons.Timestamp
-            FROM 
-                AsignacionPersonasBeacons
-                JOIN Personas ON AsignacionPersonasBeacons.PersonaID = Personas.PersonaID
-                JOIN iBeacon ON AsignacionPersonasBeacons.iBeaconID = iBeacon.iBeaconID
-            ORDER BY AsignacionPersonasBeacons.Timestamp DESC
+        SELECT 
+        AsignacionPersonasBeacons.AsignacionID,
+        Personas.Nombre + ' ' + Personas.Apellido AS PersonaName,
+        iBeacon.MacAddress AS BeaconMac,
+        AsignacionPersonasBeacons.Timestamp
+    FROM 
+        AsignacionPersonasBeacons
+    JOIN 
+        Personas ON AsignacionPersonasBeacons.PersonaID = Personas.PersonaID
+    JOIN 
+        iBeacon ON AsignacionPersonasBeacons.iBeaconID = iBeacon.iBeaconID
+    ORDER BY 
+        AsignacionPersonasBeacons.Timestamp DESC
+    
             OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
         `;
         const result = await pool.request()

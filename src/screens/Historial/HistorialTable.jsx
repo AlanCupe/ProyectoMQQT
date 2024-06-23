@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { HistorialContext } from '../../Context/HistorialProvider';
 import './HistorialTable.css';
 import { saveAs } from 'file-saver';
-import { API_URL } from '../../config';
 
 const HistorialTable = () => {
     const { historial, loading, error, page, pageSize, total, setPage } = useContext(HistorialContext);
@@ -11,10 +10,10 @@ const HistorialTable = () => {
         let url;
         switch (type) {
             case 'daily':
-                url = `/historial/excel`;
+                url = `/historial1/excel`;
                 break;
             case 'monthly':
-                url = `/historial/archivoexcel`;
+                url = `/historial1/archivoexcel`;
                 break;
             default:
                 return;
@@ -53,10 +52,10 @@ const HistorialTable = () => {
     return (
         <div className='historial'>
             <h1 className='tituloTabla'>HISTORIAL DE ASIGNACIONES</h1>
-           <div className='containerBtnHistorial'>
-           <button className='flex  btnHistorial' onClick={() => downloadExcel('daily')}>Reporte Diario <img src='img/excel.png' alt='ExcelIcon' width={'20px'}/></button>
-            <button className='flex btnHistorial' onClick={() => downloadExcel('monthly')}>Reporte General  <img src='img/excel.png' alt='ExcelIcon' width={'20px'}/></button>
-           </div>
+            <div className='containerBtnHistorial'>
+                <button className='flex  btnHistorial' onClick={() => downloadExcel('daily')}>Reporte Diario <img src='img/excel.png' alt='ExcelIcon' width={'20px'}/></button>
+                <button className='flex btnHistorial' onClick={() => downloadExcel('monthly')}>Reporte General  <img src='img/excel.png' alt='ExcelIcon' width={'20px'}/></button>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -68,7 +67,7 @@ const HistorialTable = () => {
                 </thead>
                 <tbody>
                     {historial.map((entry, index) => (
-                        <tr key={entry.HistorialID || index}>
+                        <tr key={index}>
                             <td>{entry.PersonaName}</td>
                             <td>{entry.BeaconMac}</td>
                             <td>{formatDate(entry.fechaAsignacion)}</td>

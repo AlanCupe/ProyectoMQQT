@@ -73,7 +73,7 @@ const AssignBeaconForm = memo(() => {
     
         setLoading(true);
         try {
-            console.log('Sending data to server:', postData);
+            //console.log('Sending data to server:', postData);
             const response = await fetch(`/assignbeacon`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -82,19 +82,19 @@ const AssignBeaconForm = memo(() => {
     
             if (response.ok) {
                 const newAssignment = await response.json();
-            
-    
+                
                 // Verificar si la respuesta contiene el ID de la asignación
                 if (!newAssignment.AsignacionID) {
                     throw new Error('AsignacionID no está presente en la respuesta');
                 }
-    
-                setAssignments(prevAssignments => [...prevAssignments, {
+        
+                // Cambio aquí: usar unshift en lugar de push para añadir al inicio
+                setAssignments(prevAssignments => [{
                     ...newAssignment,
                     PersonaName: `${persona.Nombre} ${persona.Apellido}`,
                     BeaconMac: beacon.MacAddress,
                     Timestamp: postData.Timestamp
-                }]);
+                }, ...prevAssignments]);
                 Swal.fire('Éxito', 'Beacon asignado correctamente', 'success');
                 setSelectedPerson(null);
                 setSelectedBeacon(null);

@@ -16,7 +16,7 @@ const HistorialProvider = ({ children }) => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`/historial?page=${page}&pageSize=${pageSize}`);
+                const response = await fetch(`/historial1?page=${page}&pageSize=${pageSize}`);
                 if (response.ok) {
                     const data = await response.json();
                     setHistorial(data.data);

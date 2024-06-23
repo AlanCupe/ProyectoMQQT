@@ -16,7 +16,7 @@ export const Mqttdata = () => {
                 const response = await axios.get(`/gatewayregister`);
                 const macAddresses = response.data.map(gateway => gateway.MacAddress);
                 
-                console.log("tabla Gateway", macAddresses)
+              //  console.log("tabla Gateway", macAddresses)
 
                 setGatewayMacAddresses(macAddresses);
             } catch (error) {
@@ -72,7 +72,7 @@ export const Mqttdata = () => {
             }
 
             const responseData = await response.json();
-            console.log('Respuesta del servidor:', responseData);
+            //console.log('Respuesta del servidor:', responseData);
         } catch (error) {
             console.error('Detalles del error:', error.message);
         }

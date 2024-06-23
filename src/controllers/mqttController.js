@@ -3,7 +3,7 @@ const sql = require('mssql');
 
 const RSSI_THRESHOLD = -100;
 const CHECK_INTERVAL_ENTRADA = 100;
-const CHECK_INTERVAL = 10000;
+const CHECK_INTERVAL = 20000;
 
 const handleMQTTMessage = async (req, res) => {
     const { topic, message } = req.body;
@@ -121,10 +121,10 @@ const handleMQTTMessage = async (req, res) => {
                         }
                     }
                 } else {
-                    console.log(`El beacon con MacAddress: ${iBeaconData.MacAddress} tiene RSSI bajo el umbral y no se considera en rango.`);
+                   // console.log(`El beacon con MacAddress: ${iBeaconData.MacAddress} tiene RSSI bajo el umbral y no se considera en rango.`);
                 }
             } else {
-                console.error('Tipo de dispositivo no reconocido o MacAddress no empieza con C30000');
+               // console.error('Tipo de dispositivo no reconocido o MacAddress no empieza con C30000');
             }
         }
 
@@ -168,7 +168,7 @@ const handleMQTTMessage = async (req, res) => {
                             .input('Timestamp', sql.DateTime, now)
                             .query(eventoQuery);
 
-                        console.log(`Evento de salida registrado para el iBeacon con MacAddress: ${row.MacAddress}`);
+                       // console.log(`Evento de salida registrado para el iBeacon con MacAddress: ${row.MacAddress}`);
                     }
                 }
             }

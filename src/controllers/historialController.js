@@ -9,27 +9,50 @@ exports.getHistorialAsignaciones = async (req, res) => {
     try {
         const pool = await dbConnection.connect();
         const query = `
-            SELECT 
-                h.HistorialID,
-                p.Nombre + ' ' + p.Apellido AS PersonaName,
-                i.MacAddress AS BeaconMac,
-                h.fechaAsignacion,
-                h.fechaBaja
-            FROM 
-                historial_asignaciones h
-                JOIN Personas p ON h.PersonaID = p.PersonaID
-                JOIN iBeacon i ON h.iBeaconID = i.iBeaconID
-            ORDER BY h.HistorialID
+       
+		 SELECT 
+         p.Nombre + ' ' + p.Apellido AS PersonaName,
+         ib.MacAddress AS BeaconMac,
+         ha.fechaAsignacion,
+         ha.fechaBaja
+     FROM 
+         historial_asignaciones ha
+     INNER JOIN 
+         Personas p ON ha.PersonaID = p.PersonaID
+     INNER JOIN 
+         iBeacon ib ON ha.iBeaconID = ib.iBeaconID
+     GROUP BY 
+         p.Nombre, p.Apellido, ib.MacAddress, ha.fechaAsignacion, ha.fechaBaja
+     ORDER BY 
+         ha.fechaAsignacion DESC
             OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
+
+            
         `;
         const result = await pool.request()
             .input('offset', sql.Int, offset)
             .input('pageSize', sql.Int, parseInt(pageSize, 10))
             .query(query);
         
-        const countQuery = `
-            SELECT COUNT(*) AS total 
-            FROM historial_asignaciones;
+            const countQuery = `
+          
+	SELECT COUNT(*) AS total
+    FROM (
+        SELECT 
+            p.Nombre + ' ' + p.Apellido AS PersonaName,
+            ib.MacAddress AS BeaconMac,
+            ha.fechaAsignacion,
+            ha.fechaBaja
+        FROM 
+            historial_asignaciones ha
+        INNER JOIN 
+            Personas p ON ha.PersonaID = p.PersonaID
+        INNER JOIN 
+            iBeacon ib ON ha.iBeaconID = ib.iBeaconID
+        GROUP BY 
+            p.Nombre, p.Apellido, ib.MacAddress, ha.fechaAsignacion, ha.fechaBaja
+    ) AS Subquery;
+    
         `;
         const countResult = await pool.request().query(countQuery);
 
@@ -201,7 +224,7 @@ exports.getArchivoHistorialAsignacionesExcel = async (req, res) => {
         const historial = result.recordset;
 
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Archivo Historial de Asignaciones');
+        const worksheet = workbook.addWorksheet('Hist. Asignaciones');
 
         worksheet.columns = [
             { header: 'ArchivoID', key: 'ArchivoID', width: 10 },

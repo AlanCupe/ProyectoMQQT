@@ -54,9 +54,9 @@ app.use('/gateways', gatewayRoutes);
 app.use('/eventosbeacons', eventosBeaconsRoutes);
 
 app.use('/report', reportsGeneralRoutes); // Nueva ruta para reportes
-app.use('/historial', historialRoutes);
+app.use('/historial1', historialRoutes);
 
-app.get('/dashboard', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 

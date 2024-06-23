@@ -1,0 +1,96 @@
+.form-EventosBeaconsFilter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-EventosBeaconsFilter h2 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-EventosBeaconsFilter .form-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    column-gap: 5px;
+    input[type="datetime-local"]{
+        height: 37px;
+        border: none;
+        border-radius: 8px;
+    }
+}
+
+.form-EventosBeaconsFilter .form-group label {
+   
+    font-family: "HindVadodara-Light";
+    color: #0056b3;
+}
+
+.form-EventosBeaconsFilter .form-group .input-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.form-EventosBeaconsFilter .form-group .input-container input,
+.form-EventosBeaconsFilter .form-group .input-container .select {
+    flex: 1;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-EventosBeaconsFilter .button-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-EventosBeaconsFilter button {
+    padding: 10px;
+    background-color: #17326D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.form-EventosBeaconsFilter button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .form-EventosBeaconsFilter .form-group .input-container {
+        flex-direction: column;
+    }
+
+    .form-EventosBeaconsFilter .form-group .input-container input,
+    .form-EventosBeaconsFilter .form-group .input-container .select {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .form-EventosBeaconsFilter .button-container {
+        flex-direction: column;
+    }
+
+    .form-EventosBeaconsFilter button {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
