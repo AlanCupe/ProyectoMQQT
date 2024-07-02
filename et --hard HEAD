@@ -1,0 +1,107 @@
+[33mcommit 445a9417323f0ca04df2d760d45677d952c4a3cc[m[33m ([m[1;36mHEAD -> [m[1;32madcupe[m[33m)[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Mon Jun 10 23:42:09 2024 -0500
+
+    agregando Dist para el despliegue 1
+
+[33mcommit b8c347e88b1917cae6f984b77ae88e3d216bd6d5[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Mon Jun 10 00:04:51 2024 -0500
+
+    modificando graficos
+
+[33mcommit f1a0bd30b8d91465f2863769637730112fb61d9b[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Sun Jun 9 01:20:36 2024 -0500
+
+    arreglado
+
+[33mcommit 5544fde1b155023bb6cbb0326a8afa97c378a903[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Fri Jun 7 12:36:50 2024 -0500
+
+    Agregando graficos
+
+[33mcommit bdd3807137474acc44d5c53bf60b39868f35e270[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Wed Jun 5 22:47:07 2024 -0500
+
+    Agregando retoques de CSS
+
+[33mcommit 041e1b402c4821f740ab27fa805017f22346ffd4[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Thu May 30 18:24:07 2024 -0500
+
+    se agrego paginacion y borrado total de la tabla personal y asignaciones
+
+[33mcommit 4d8b35935e9158c3b15767e9a1a7252c36bcf320[m[33m ([m[1;32mGiancarlos[m[33m)[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Thu May 30 14:33:52 2024 -0500
+
+    se agrego la descargar del historial completo
+
+[33mcommit f91ad7cd1d19934dc7ecbfdb20c6e4f52cfba9f4[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Thu May 30 12:08:46 2024 -0500
+
+    se solucione la asignacion a persona y becons
+
+[33mcommit 9d8ae50f1a9887896122d65cebb43eb9de8a3796[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Thu May 30 11:05:40 2024 -0500
+
+    se guarde todo los datos
+
+[33mcommit 48b8779f76e1d49b6f52a9dd4da4871557e7e197[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Thu May 30 09:42:46 2024 -0500
+
+    se mejoro el proyecto
+
+[33mcommit 25d9edeab6986925a297eb4bc8f82cfb10b56fb8[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Thu May 30 03:35:03 2024 -0500
+
+    Logica Dashboard Completada
+
+[33mcommit 71fb01a54920e13a192ed8b41013733c44f06c94[m[33m ([m[1;32mpruebaFilter[m[33m)[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Wed May 29 21:37:13 2024 -0500
+
+    se modifico el problema
+
+[33mcommit 23b79a443eb071171f6b6e5f63e916935bded651[m[33m ([m[1;32mpruebaFilterActualizado[m[33m)[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Wed May 29 21:29:57 2024 -0500
+
+    se mejoro a un 98%
+
+[33mcommit 8e306073e1cbb4ab3f18636ca81082f6a95f212e[m[33m ([m[1;32mdasboard-Actualizado[m[33m)[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Wed May 29 17:39:18 2024 -0500
+
+    PROYECTO - FILTRO 90%
+
+[33mcommit e61484475b30e5b01a05bf5457bf21eb2007d8de[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Wed May 29 13:37:03 2024 -0500
+
+    se agrego alertas, filtreo, eliminacion, proyecto actualizado a un 98%
+
+[33mcommit d64760667bd9f36079b83052851e4b5c39cb3118[m[33m ([m[1;32mdashboard[m[33m)[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Tue May 28 20:32:55 2024 -0500
+
+    query filtro
+
+[33mcommit d189a402ca48bfcc191780da1563b5be5e50a7fb[m
+Author: Alan Diego Cupe Soto <cupediego99@hotmail.com>
+Date:   Mon May 27 20:59:48 2024 -0500
+
+    se logro de forma dinamica la suscripcion de los gateway
+
+[33mcommit 2609a811606dde3f7681d142dc225713430ff914[m
+Author: AlanCupe <cupediego99@hotmail.com>
+Date:   Mon May 27 17:42:45 2024 -0500
+
+    Se mejoro el proyecto a un 95%

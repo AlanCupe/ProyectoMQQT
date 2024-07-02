@@ -16,10 +16,11 @@ export const Dashboard = memo(() => {
     const { assignments, fetchAssignments } = useContext(AreaAssigmentContext);
     const [areas, setAreas] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
-    const [filterEnabled, setFilterEnabled] = useState(false);
+    const [filterEnabled, setFilterEnabled] = useState(true);
     const [chartData, setChartData] = useState([]);
     const [chartDataPorArea, setChartDataPorArea] = useState([]);
 
+  
     useEffect(() => {
         const dataPorArea = gateways.map(gateway => {
             const areaNombre = getAreaNombre(gateway.MacAddress);
@@ -39,9 +40,7 @@ export const Dashboard = memo(() => {
     }, [eventosBeacons, gateways]);
 
     useEffect(() => {
-        console.log("Eventos Beacons:", eventosBeacons);
-        console.log("Gateways:", gateways);
-        console.log("Asignaciones:", assignments);
+        
         updateAreas();
     }, [eventosBeacons, gateways, assignments]);
 
@@ -159,18 +158,18 @@ export const Dashboard = memo(() => {
     return (
         <>  
         <div className='chartsContainer'>
-       
+       <h1 className='tituloTabla'>SISTEMA DE CONTROL DE ACCESO DE LA U.M. TICLIO</h1>
     
       
         <div className='countsContainer'>
-        <EventCountCard count={filteredData.length}  urlImg="/img/totalTrabajadores.png" description="Total de Eventos" className="firtsCountCard"/>
+        <EventCountCard count={filteredData.length}  urlImg="/img/totalTrabajadores.png" description="Total de Personas" className="firtsCountCard"/>
             {chartDataPorArea.map((areaData,indice) => (
                 <EventCountCard
                     key={`${areaData.area}${indice}`}
                     count={areaData.entrada + areaData.salida}
                     urlImg="/img/trabajadores.png"
 
-                    description={`Eventos en:`}
+                    description={`Personas en:`}
                     area={areaData.area}
                 />
             ))}
@@ -183,7 +182,7 @@ export const Dashboard = memo(() => {
         </div>
             
             <div className='chartsContainer'>
-    <h2 className='tituloTabla'>Eventos por Área</h2>
+    <h2 className='tituloTabla'>Personas por Área</h2>
     <ChartBarrasPorArea data={chartDataPorArea} />
     {/**<ChartBarras data={chartData}/>**/}
 

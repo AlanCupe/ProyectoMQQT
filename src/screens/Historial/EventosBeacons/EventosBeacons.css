@@ -1,0 +1,26 @@
+.superficie{
+background-color: rgba(0, 255, 255, 0.493) !important;
+}
+.interiorMina{
+background-color: rgba(241, 126, 44, 0.534) !important;
+}
+
+.eventosBeacons{
+    padding: 0px 20px;
+    padding-bottom: 20px;
+}
+.btnHistorialEventos{
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    border: 2px solid green;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.contadorRows{
+    font-family: "HindVadodara-Bold";
+    font-size: 20px;
+    text-transform: uppercase;
+    margin: 8px 0px;
+}

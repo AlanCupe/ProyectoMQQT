@@ -70,3 +70,34 @@ exports.getAllEventos2 = async (req, res) => {
         res.status(500).send('Error al obtener los eventos de beacons');
     }
 };
+
+exports.getEventosBeacons = async (req, res) => {
+  try {
+      const pool = await dbConnection.connect();
+      const result = await pool.request().query(`
+      SELECT 
+      b.MacAddress AS 'macBeacon',
+      COALESCE(a.Nombre, g.MacAddress) AS 'ubicacion',
+      eb.Timestamp AS 'fechaHora',
+      COALESCE(eb.Usuario, '-') AS 'usuario',  -- Reemplaza NULL por '-'
+      eb.TipoEvento AS 'tipoEvento'  -- Agrega la columna TipoEvento
+  FROM 
+      EventosBeacons eb
+  JOIN 
+      iBeacon b ON eb.iBeaconID = b.iBeaconID
+  JOIN 
+      Gateway g ON eb.GatewayID = g.GatewayID
+  LEFT JOIN 
+      AsignacionGatewaysAreas aga ON g.GatewayID = aga.GatewayID
+  LEFT JOIN 
+      Areas a ON aga.AreaID = a.AreaID
+  ORDER BY 
+      eb.Timestamp DESC;
+      `);
+      console.log(result.recordset);
+      res.json(result.recordset);
+  } catch (error) {
+      console.error('Database error:', error);
+      res.status(500).send('Error al obtener los eventos de beacons');
+  }
+};

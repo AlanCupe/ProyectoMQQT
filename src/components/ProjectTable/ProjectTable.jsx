@@ -2,9 +2,7 @@ import React, { memo, useEffect } from 'react';
 import './ProjectTable.css';
 
 const ProjectTable = memo(({ data }) => {
-    useEffect(() => {
-        console.log("Datos desde DASHBOARD A PROJECT TABLE:", data);
-    }, [data]);
+   
 
     if (!data || data.length === 0) {
         return <div>No hay datos para mostrar.</div>;

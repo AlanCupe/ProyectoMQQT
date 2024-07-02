@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { PanelControl } from '../screens/PanelControl/PanelControl'
-import { Home } from '../screens/Home';
+
 import { RegistroUsers } from '../screens/PanelControl/outlet/RegistroUsers';
 import { Dashboard } from '../screens/Dashboard/Dashboard';
 import Sidebar from '../components/Sidebar/Sidebar';
@@ -14,6 +14,7 @@ import { RegistroBecons } from '../screens/PanelControl/outlet/RegistroBecons';
 import { AreaAssignment_Gateway } from '../screens/PanelControl/outlet/AreaAssignment_Gateway/AreaAssignment_Gateway';
 import { AreaRegister } from '../screens/PanelControl/outlet/AreaRegister/AreaRegister';
 import Historial from '../screens/Historial/Historial';
+
 
 
 export const Router = () => {
@@ -36,7 +37,7 @@ export const Router = () => {
                         <Route path="arearegister"  element={<AreaRegister/>} />
                         <Route path="areaasignation"  element={<AreaAssignment_Gateway/>} />
                     </Route>
-                    <Route path="cerrarsesion" element={<Navigate to="/" />} />
+                  
                     <Route path='*' element={<Error/>}/>
                 </Routes>
             </div>

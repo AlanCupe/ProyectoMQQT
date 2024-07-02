@@ -27,8 +27,8 @@ export const GatewayTable = memo(() => {
   const handleSave = async () => {
     try {
         const formattedTimestamp = new Date(newTimestamp).toISOString(); // Asegura el formato adecuado
-        console.log("Nuevo Timestamp:", formattedTimestamp);
-        console.log("Datos a enviar al backend:", editGateway.GatewayID, newMacAddress, formattedTimestamp); // Nuevo console.log para verificar los datos antes de enviarlos al backend
+        //console.log("Nuevo Timestamp:", formattedTimestamp);
+        //console.log("Datos a enviar al backend:", editGateway.GatewayID, newMacAddress, formattedTimestamp); // Nuevo console.log para verificar los datos antes de enviarlos al backend
         await updateGateway(editGateway.GatewayID, newMacAddress, formattedTimestamp);
         setEditGateway(null); // Restablecer el estado de edición después de guardar
     } catch (error) {

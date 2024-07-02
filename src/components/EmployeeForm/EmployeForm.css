@@ -18,6 +18,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+    column-gap: 10px;
 }
 
 .form-employe .error {
@@ -29,7 +30,7 @@
 
 .form-employe input[type="text"] {
     flex: 1;
-    margin-right: 10px;
+    
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;

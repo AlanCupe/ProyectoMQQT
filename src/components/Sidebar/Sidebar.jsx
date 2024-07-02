@@ -18,11 +18,15 @@ const Sidebar = ({ isOpen, toggle }) => {
                 <span className="icon"><img src='/img/controlPanel.png'/></span>
                 <span className="title">Control Panel</span>
             </NavLink>
+
+             
+            
             <NavLink to={'/historial'} className={({ isActive }) => isActive ? "menu-item active" : "menu-item"}>
                 <span className="icon"><img src='/img/historialIcon.png'/></span>
                 <span className="title">Historial</span>
             </NavLink>
          
+
         </div>
     );
 };
