@@ -1,91 +1,153 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import EventosBeaconsFilter from '../EventosBeaconsFilter/EventosBeaconsFilter';
-import './EventosBeacons.css'
+import axios from "axios";
+import React, { memo, useEffect, useState, useMemo } from "react";
+import EventosBeaconsFilter from "../EventosBeaconsFilter/EventosBeaconsFilter";
+import * as XLSX from 'xlsx';
+import './EventosBeacons.css';
 
-const EventosBeacons = () => {
-    const [eventos, setEventos] = useState([]);
-    const [personasSet, setPersonasSet] = useState(new Set());
-    const [macAddressesSet, setMacAddressesSet] = useState(new Set());
-    const [filteredEventos, setFilteredEventos] = useState([]);
-    const [ubicacionesSet, setUbicacionesSet] = useState(new Set());
+const EventosBeacons = memo(() => {
+  const [eventos, setEventos] = useState([]);
+  const [filtroUsuario, setFiltroUsuario] = useState("");
+  const [filtroMacBeacon, setFiltroMacBeacon] = useState("");
+  const [filtroFechaInicio, setFiltroFechaInicio] = useState("");
+  const [filtroFechaFin, setFiltroFechaFin] = useState("");
+  const [filtroUbicacion, setFiltroUbicacion] = useState("");
+  const [filtroTipoEvento, setFiltroTipoEvento] = useState("");
+  const [paginaActual, setPaginaActual] = useState(1);
+  const [eventosPorPagina, setEventosPorPagina] = useState(20);
 
-    useEffect(() => {
-        fetchEventos();
-    }, []);
+  const usuarios = eventos.map((evento) => evento.usuario);
+  const macs = eventos.map((evento) => evento.macBeacon);
+  const ubicaciones = eventos.map((evento) => evento.ubicacion);
+  const tiposEvento = eventos.map((evento) => evento.tipoEvento);
 
+  useEffect(() => {
     const fetchEventos = async () => {
-        try {
-            const response = await axios.get('/eventosbeacons/eventos-beacons');
-            setEventos(response.data);
-            updateSets(response.data);
-            setFilteredEventos(response.data); // Inicializa filteredEventos con todos los eventos al cargar
-        } catch (error) {
-            console.error('Error al obtener eventos:', error);
-        }
+      try {
+        const response = await axios.get("/eventosbeacons/eventos-beacons");
+        setEventos(response.data);
+      } catch (error) {
+        console.error("Error al obtener eventos:", error);
+      }
     };
 
-    const updateSets = (eventos) => {
-        const newPersonasSet = new Set();
-        const newMacAddressesSet = new Set();
-        const newUbicacionesSet = new Set();
-        eventos.forEach(evento => {
-            newPersonasSet.add(evento.PersonaNombreApellido);
-            newMacAddressesSet.add(evento.BeaconMacAddress);
-            newUbicacionesSet.add(evento.Ubicacion); // Asumiendo que 'Ubicacion' es el campo correcto
-        });
-        setPersonasSet(newPersonasSet);
-        setMacAddressesSet(newMacAddressesSet);
-        setUbicacionesSet(newUbicacionesSet);
-    };
-    
-    const onApplyFilters = (filters) => {
-        const filtered = eventos.filter(evento => {
-            return (!filters.fechaInicio || new Date(evento.Timestamp) >= new Date(filters.fechaInicio)) &&
-                   (!filters.fechaFin || new Date(evento.Timestamp) <= new Date(filters.fechaFin)) &&
-                   (!filters.macBeacon || evento.BeaconMacAddress.includes(filters.macBeacon)) &&
-                   (!filters.persona || evento.PersonaNombreApellido === filters.persona) &&
-                   (!filters.ubicacion || evento.Ubicacion === filters.ubicacion); // Filtro por ubicación
-        });
-        setFilteredEventos(filtered);
-    };
+    fetchEventos();
+  }, []);
 
-    const onResetFilters = () => {
-        setFilteredEventos(eventos);
-    };
+  // Agrega este useEffect después de tus estados y el useEffect existente para la carga de datos
+  useEffect(() => {
+    // Reinicia la página actual a 1 cada vez que los filtros cambian
+    setPaginaActual(1);
+  }, [
+    filtroUsuario,
+    filtroMacBeacon,
+    filtroFechaInicio,
+    filtroFechaFin,
+    filtroUbicacion,
+    filtroTipoEvento,
+  ]);
+
+  const eventosFiltrados = eventos.filter((evento) => {
+    const fechaEvento = new Date(evento.fechaHora);
+    const fechaInicio = filtroFechaInicio ? new Date(filtroFechaInicio) : null;
+    const fechaFin = filtroFechaFin ? new Date(filtroFechaFin) : null;
 
     return (
-        <div>
-            <h2 className='tituloTabla'> HISTORIAL - SEGUIMIENTO</h2>
-            <EventosBeaconsFilter
-    onApplyFilters={onApplyFilters}
-    onResetFilters={onResetFilters}
-    personas={Array.from(personasSet)}
-    macAddresses={Array.from(macAddressesSet)}
-    ubicaciones={Array.from(ubicacionesSet)} // Asegúrate de pasar esto
-/>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Persona</th>
-                        <th>MacAddress Beacon</th>
-                        <th>Fecha y Hora</th>
-                        <th>Ubicación</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredEventos.map(evento => (
-                        <tr key={evento.iBeaconID} className={evento.Ubicacion=='Superficie'?'superficie':'interiorMina'}>
-                            <td>{evento.PersonaNombreApellido}</td>
-                            <td>{evento.BeaconMacAddress}</td>
-                            <td>{new Date(evento.Timestamp).toLocaleString()}</td>
-                            <td>{evento.Ubicacion}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+      evento.usuario?.toLowerCase().includes(filtroUsuario.toLowerCase()) &&
+      evento.macBeacon?.toLowerCase().includes(filtroMacBeacon.toLowerCase()) &&
+      (!fechaInicio || fechaEvento >= fechaInicio) &&
+      (!fechaFin || fechaEvento <= fechaFin) &&
+      evento.ubicacion?.toLowerCase().includes(filtroUbicacion.toLowerCase()) &&
+      evento.tipoEvento?.toLowerCase().includes(filtroTipoEvento.toLowerCase())
     );
-};
+  });
+  const totalPaginas = Math.ceil(eventosFiltrados.length / eventosPorPagina);
+  const indexDelUltimoEvento = paginaActual * eventosPorPagina;
+  const indexDelPrimerEvento = indexDelUltimoEvento - eventosPorPagina;
+  const eventosActuales = eventosFiltrados.slice(
+    indexDelPrimerEvento,
+    indexDelUltimoEvento
+  );
+
+  const cambiarPagina = (numeroPagina) => {
+    setPaginaActual(numeroPagina);
+  };
+  const exportarAExcel = (data, fileName) => {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Eventos");
+    XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  };
+
+  return (
+    <div className="historial">
+      <EventosBeaconsFilter
+        filtroUsuario={filtroUsuario}
+        filtroFechaFin={filtroFechaFin}
+        filtroFechaInicio={filtroFechaInicio}
+        filtroMacBeacon={filtroMacBeacon}
+        filtroUbicacion={filtroUbicacion}
+        filtroTipoEvento={filtroTipoEvento}
+        setFiltroUsuario={setFiltroUsuario}
+        setFiltroMacBeacon={setFiltroMacBeacon}
+        setFiltroFechaInicio={setFiltroFechaInicio}
+        setFiltroFechaFin={setFiltroFechaFin}
+        setFiltroUbicacion={setFiltroUbicacion}
+        setFiltroTipoEvento={setFiltroTipoEvento}
+        usuarios={usuarios}
+        macs={macs}
+        ubicaciones={ubicaciones}
+        tiposEvento={tiposEvento}
+      />
+      <button className="btnHistorialEventos"
+        onClick={() => exportarAExcel(eventosFiltrados, "eventos_filtrados")}
+      >
+        Descargar Filtrado 
+      </button>
+      <p className="contadorRows">Total: {eventosFiltrados.length}</p>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Usuario</th>
+            <th>MacAddress Beacon</th>
+            <th>Fecha y Hora</th>
+            <th>Ubicación</th>
+            <th>Tipo de Evento</th>
+          </tr>
+        </thead>
+        <tbody>
+          {eventosActuales.map((evento, index) => (
+            <tr key={`${index}Evento1`}>
+              <td>{index + 1 + (paginaActual - 1) * eventosPorPagina}</td>
+              <td>{evento.usuario}</td>
+              <td>{evento.macBeacon}</td>
+              <td>{new Date(evento.fechaHora).toLocaleString()}</td>
+              <td>{evento.ubicacion}</td>
+              <td>{evento.tipoEvento}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="pagination">
+        <button
+          onClick={() => cambiarPagina(paginaActual - 1)}
+          disabled={paginaActual === 1}
+        >
+          Anterior
+        </button>
+        <span>
+          Página {paginaActual} de {totalPaginas}
+        </span>
+        <button
+          onClick={() => cambiarPagina(paginaActual + 1)}
+          disabled={paginaActual === totalPaginas || totalPaginas === 0}
+        >
+          Siguiente
+        </button>
+      </div>
+    </div>
+  );
+});
 
 export default EventosBeacons;

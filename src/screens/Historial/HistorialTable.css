@@ -19,17 +19,7 @@
     padding-top: 30px;
 }
 
-.btnHistorial{
 
- 
-    border: 2px solid green;
-    font-family: "HindVadodara-Bold";
-    font-size: 1rem ;
-    color: rgb(1, 74, 92);
-    
-    padding: 5px;
-    border-radius: 4px;
-}
 .btnHistorial:hover{
     box-shadow: 0px 0px 5px rgb(0, 202, 125);
 
@@ -40,4 +30,32 @@
     justify-content: flex-end;
     padding-bottom: 20px;
     padding-right: 5px;
+}
+.flexForm{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 80px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    column-gap: 10px;
+
+    .selecth,input[type='datetime-local'],.btnHistorial{
+        padding: 8px;
+        border-radius: 3px;
+        border: none;
+        
+        width: 100%;
+    }
+    .btnHistorial{
+        border: 2px solid green;
+        font-family: "HindVadodara-Bold";
+        font-size: 1rem ;
+        color: rgb(1, 74, 92);
+        cursor: pointer;
+       
+        border-radius: 4px;
+    }
 }

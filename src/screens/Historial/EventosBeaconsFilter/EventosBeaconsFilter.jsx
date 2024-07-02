@@ -1,142 +1,113 @@
-import React, { useState } from "react";
-import Select from "react-select";
-import "./EventosBeaconsFilter.css";
+import React from 'react';
+import Select from 'react-select';
+import './EventosBeaconsFilter.css';
 
 const EventosBeaconsFilter = ({
-  onApplyFilters,
-  onResetFilters,
-  personas,
-  macAddresses,
-  ubicaciones
+  filtroUsuario, 
+  filtroMacBeacon, 
+  filtroFechaInicio, 
+  filtroFechaFin, 
+  filtroUbicacion, 
+  filtroTipoEvento,
+
+  setFiltroUsuario, 
+  setFiltroMacBeacon, 
+  setFiltroFechaInicio, 
+  setFiltroFechaFin, 
+  setFiltroUbicacion, 
+  setFiltroTipoEvento, 
+  usuarios, 
+  macs, 
+  ubicaciones, 
+  tiposEvento
 }) => {
-  const [selectedPersona, setSelectedPersona] = useState(null);
-  const [selectedMacAddress, setSelectedMacAddress] = useState(null);
-  const [selectedUbicacion, setSelectedUbicacion] = useState(null);
-  const [filters, setFilters] = useState({
-    fechaInicio: "",
-    fechaFin: "",
-    macBeacon: "",
-    persona: "",
-    ubicacion: "",
-  });
-
-  const handlePersonaChange = (selectedOption) => {
-    setSelectedPersona(selectedOption);
-    setFilters((prev) => ({
-      ...prev,
-      persona: selectedOption ? selectedOption.value : "",
-    }));
+  // Función para obtener opciones únicas
+  const getUniqueOptions = (items) => {
+    const uniqueItems = Array.from(new Set(items)); // Elimina duplicados
+    return uniqueItems.map(item => ({ value: item, label: item }));
   };
 
-  const handleUbicacionChange = (selectedOption) => {
-    setSelectedUbicacion(selectedOption);
-    setFilters((prev) => ({
-      ...prev,
-      ubicacion: selectedOption ? selectedOption.value : "",
-    }));
-  };
+  // Convertir arrays a opciones únicas para react-select
+  const usuarioOptions = getUniqueOptions(usuarios);
+  const macOptions = getUniqueOptions(macs);
+  const ubicacionOptions = getUniqueOptions(ubicaciones);
+  const tipoEventoOptions = getUniqueOptions(tiposEvento);
 
-  const handleMacAddressChange = (selectedOption) => {
-    setSelectedMacAddress(selectedOption);
-    setFilters((prev) => ({
-      ...prev,
-      macBeacon: selectedOption ? selectedOption.value : "",
-    }));
-  };
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-  const applyAndResetFilters = () => {
-    onApplyFilters(filters);
-    // Restablecer los estados de los componentes seleccionados
-    setSelectedPersona(null);
-    setSelectedMacAddress(null);
-    // Restablecer los filtros
-    setFilters({
-      //fechaInicio: '',
-      //fechaFin: '',
-      macBeacon: "",
-      persona: "",
-      ubicacion: "",
-    });
-  };
 
-  // Modificar el botón de aplicar filtros para usar la nueva función
-  <button type="button" onClick={applyAndResetFilters}>
-    SEGUIMIENTO
-  </button>;
+
+  const limpiarTodosLosCampos = (e) => {
+   
+   
+    setFiltroFechaInicio('');
+    setFiltroFechaFin('');
+    setFiltroUbicacion('');
+    setFiltroTipoEvento('');
+    setFiltroUsuario('');
+    setFiltroMacBeacon('');
+  };
   return (
-    <div>
-      <form className="form-EventosBeaconsFilter">
-        <div className="form-group">
-          <label htmlFor="fechaInicio">Fecha Inicio</label>
-          <input
-            type="datetime-local"
-            id="fechaInicio"
-            name="fechaInicio"
-            value={filters.fechaInicio}
-            onChange={handleFilterChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="fechaFin">Fecha Fin</label>
-          <input
-            type="datetime-local"
-            id="fechaFin"
-            name="fechaFin"
-            value={filters.fechaFin}
-            onChange={handleFilterChange}
-          />
-        </div>
-        <div className="form-group">
-          <Select
-            options={personas.map((persona) => ({
-              value: persona,
-              label: persona,
-            }))}
-            onChange={handlePersonaChange}
-            value={selectedPersona}
-            placeholder="Seleccione una persona"
-            isClearable
-          />
-        </div>
-        <div className="form-group">
-          <Select
-            options={macAddresses.map((mac) => ({ value: mac, label: mac }))}
-            onChange={handleMacAddressChange}
-            value={selectedMacAddress}
-            placeholder="Seleccione una dirección MAC"
-            isClearable
-          />
-        </div>
-        <div className="form-group">
-          <Select
-            options={ubicaciones.map((ubicacion) => ({
-              value: ubicacion,
-              label: ubicacion,
-            }))}
-            onChange={handleUbicacionChange}
-            value={selectedUbicacion}
-            placeholder="Seleccione una ubicación"
-            isClearable
-          />
-        </div>
-        <div className="button-container">
-          <button type="button" onClick={(e) => applyAndResetFilters()}>
-            Aplicar Filtros
-          </button>
-          <button type="button" onClick={(e) => onResetFilters()}>
-            Resetear Filtros
-          </button>
-        </div>
-      </form>
+    <div className="form-EventosBeaconsFilter">
+ <Select
+  isClearable
+  options={usuarioOptions}
+  value={usuarioOptions.find(option => option.value === filtroUsuario) || null}
+  onChange={option => setFiltroUsuario(option ? option.value : '')} // Cambiado para manejar null como ''
+  className='selecth'
+  placeholder="Filtrar por usuario"
+/>
+
+<Select
+  isClearable
+  options={macOptions}
+  value={macOptions.find(option => option.value === filtroMacBeacon) || null}
+  onChange={option => setFiltroMacBeacon(option ? option.value : '')} // Cambiado para manejar null como ''
+  className='selecth'
+  placeholder="Filtrar por MAC"
+/>
+      <div className='form-group'>
+        <label htmlFor="fechaInicio">Fecha Inicio</label>
+      <input
+        id='fechaInicio'
+        name='fechaInicio'
+        type="datetime-local"
+        value={filtroFechaInicio}
+        onChange={e => setFiltroFechaInicio(e.target.value)}
+        placeholder="Fecha de inicio"
+      />
+      </div>
+      
+      <div className='form-group'>
+      <label htmlFor="fechaFin">Fecha Fin</label>
+      <input
+        id='fechaFin'
+        name='fechaFin'
+        type="datetime-local"
+        value={filtroFechaFin}
+        onChange={e => setFiltroFechaFin(e.target.value)}
+        placeholder="Fecha de fin"
+      />
+      </div>
+     
+      <Select
+  isClearable
+  options={ubicacionOptions} // Opciones para el select de ubicaciones
+  value={ubicacionOptions.find(option => option.value === filtroUbicacion)||null} // Asegura que el select muestre el valor actual del estado
+  onChange={option => setFiltroUbicacion(option ? option.value : '')} // Actualiza el estado cuando cambia el select
+  className='selecth'
+  placeholder="Filtrar por ubicación"
+/>
+<Select
+  isClearable
+  options={tipoEventoOptions} // Opciones para el select de tipos de evento
+  value={tipoEventoOptions.find(option => option.value === filtroTipoEvento)||null} // Asegura que el select muestre el valor actual del estado
+  onChange={option => setFiltroTipoEvento(option ? option.value : '')} // Actualiza el estado cuando cambia el select
+  className='selecth'
+  placeholder="Filtrar por tipo de evento"
+/>
+      <button onClick={limpiarTodosLosCampos}>Limpiar</button>
     </div>
   );
-};
+}
 
 export default EventosBeaconsFilter;

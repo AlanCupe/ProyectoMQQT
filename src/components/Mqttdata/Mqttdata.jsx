@@ -30,7 +30,7 @@ export const Mqttdata = () => {
     useEffect(() => {
         if (gatewayMacAddresses.length === 0) return;
 
-        const client = mqtt.connect('ws://192.168.18.34:9001');
+        const client = mqtt.connect('ws://10.24.54.45:9001');
         setMqttClient(client);
 
         client.on('connect', () => {

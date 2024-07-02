@@ -10,21 +10,21 @@ exports.getHistorialAsignaciones = async (req, res) => {
         const pool = await dbConnection.connect();
         const query = `
        
-		 SELECT 
-         p.Nombre + ' ' + p.Apellido AS PersonaName,
-         ib.MacAddress AS BeaconMac,
-         ha.fechaAsignacion,
-         ha.fechaBaja
-     FROM 
-         historial_asignaciones ha
-     INNER JOIN 
-         Personas p ON ha.PersonaID = p.PersonaID
-     INNER JOIN 
-         iBeacon ib ON ha.iBeaconID = ib.iBeaconID
-     GROUP BY 
-         p.Nombre, p.Apellido, ib.MacAddress, ha.fechaAsignacion, ha.fechaBaja
-     ORDER BY 
-         ha.fechaAsignacion DESC
+        SELECT 
+        p.Nombre + ' ' + p.Apellido AS PersonaName,
+        ib.MacAddress AS BeaconMac,
+        MAX(ha.fechaAsignacion) AS fechaAsignacion,
+        ha.fechaBaja
+    FROM 
+        historial_asignaciones ha
+    INNER JOIN 
+        Personas p ON ha.PersonaID = p.PersonaID
+    INNER JOIN 
+        iBeacon ib ON ha.iBeaconID = ib.iBeaconID
+    GROUP BY 
+        p.Nombre, p.Apellido, ib.MacAddress, ha.fechaBaja
+    ORDER BY 
+        MAX(ha.fechaAsignacion) DESC
             OFFSET @offset ROWS FETCH NEXT @pageSize ROWS ONLY;
 
             

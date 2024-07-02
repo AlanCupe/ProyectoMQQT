@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { memo } from 'react'
 import HistorialTable from './HistorialTable'
 import HistorialProvider from '../../Context/HistorialProvider'
 import EventosBeacons from './EventosBeacons/EventosBeacons'
 
-const Historial = () => {
+const Historial = memo(() => {
   return (
     <div>
         <HistorialProvider>
@@ -12,6 +12,6 @@ const Historial = () => {
         </HistorialProvider>
     </div>
   )
-}
+})
 
 export default Historial

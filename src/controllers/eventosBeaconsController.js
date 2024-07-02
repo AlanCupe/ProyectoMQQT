@@ -75,49 +75,26 @@ exports.getEventosBeacons = async (req, res) => {
   try {
       const pool = await dbConnection.connect();
       const result = await pool.request().query(`
-      WITH CTE AS (
-        SELECT 
-            CONCAT(p.Nombre, ' ', p.Apellido) AS PersonaNombreApellido,
-            ib.MacAddress AS BeaconMacAddress,
-            eb.Timestamp AS [Timestamp],
-            CASE 
-                WHEN ag.Nombre IS NOT NULL THEN ag.Nombre
-                ELSE gw.MacAddress
-            END AS [Ubicacion],
-            eb.TipoEvento,
-            ROW_NUMBER() OVER (PARTITION BY p.PersonaID, ib.MacAddress, eb.Timestamp ORDER BY eb.Timestamp DESC) AS rn
-        FROM 
-            EventosBeacons eb
-        INNER JOIN 
-            iBeacon ib ON eb.iBeaconID = ib.iBeaconID
-        INNER JOIN 
-            Gateway gw ON eb.GatewayID = gw.GatewayID
-        LEFT JOIN 
-            AsignacionGatewaysAreas aga ON eb.GatewayID = aga.GatewayID
-        LEFT JOIN 
-            Areas ag ON aga.AreaID = ag.AreaID
-        INNER JOIN 
-            historial_asignaciones ha ON eb.iBeaconID = ha.iBeaconID
-        LEFT JOIN 
-            Personas p ON ha.PersonaID = p.PersonaID
-        WHERE 
-            eb.TipoEvento = 'Entrada'
-            AND eb.Timestamp BETWEEN ha.fechaAsignacion AND ISNULL(ha.fechaBaja, GETDATE())
-    )
-    SELECT 
-        PersonaNombreApellido,
-        BeaconMacAddress,
-        [Timestamp],
-        [Ubicacion],
-        TipoEvento
-    FROM 
-        CTE
-    WHERE 
-        rn = 1
-    ORDER BY 
-        [Timestamp] DESC;
-    
+      SELECT 
+      b.MacAddress AS 'macBeacon',
+      COALESCE(a.Nombre, g.MacAddress) AS 'ubicacion',
+      eb.Timestamp AS 'fechaHora',
+      COALESCE(eb.Usuario, '-') AS 'usuario',  -- Reemplaza NULL por '-'
+      eb.TipoEvento AS 'tipoEvento'  -- Agrega la columna TipoEvento
+  FROM 
+      EventosBeacons eb
+  JOIN 
+      iBeacon b ON eb.iBeaconID = b.iBeaconID
+  JOIN 
+      Gateway g ON eb.GatewayID = g.GatewayID
+  LEFT JOIN 
+      AsignacionGatewaysAreas aga ON g.GatewayID = aga.GatewayID
+  LEFT JOIN 
+      Areas a ON aga.AreaID = a.AreaID
+  ORDER BY 
+      eb.Timestamp DESC;
       `);
+      console.log(result.recordset);
       res.json(result.recordset);
   } catch (error) {
       console.error('Database error:', error);

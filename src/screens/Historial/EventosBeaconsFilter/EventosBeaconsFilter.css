@@ -2,13 +2,14 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     max-width: 100%;
     margin: 0 auto;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    column-gap: 10px;
 }
 
 .form-EventosBeaconsFilter h2 {
@@ -22,12 +23,13 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 23%;
     column-gap: 5px;
     input[type="datetime-local"]{
         height: 37px;
         border: none;
         border-radius: 8px;
+        width: 100%;
     }
 }
 
@@ -35,6 +37,7 @@
    
     font-family: "HindVadodara-Light";
     color: #0056b3;
+    width: 12%;
 }
 
 .form-EventosBeaconsFilter .form-group .input-container {
@@ -51,6 +54,7 @@
     margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 100%;
 }
 
 .form-EventosBeaconsFilter .button-container {
